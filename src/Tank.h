@@ -16,10 +16,7 @@ public:
 	
 
 	void addForce(glm::vec2 Amount);
-	void move();
-	void moveLeft();
-	void moveRight();
-	void stopMoving();
+	void move(float dir);
 
 	bool doesUpdate = false; 
 
@@ -31,7 +28,7 @@ public:
 
 	float friction;
 	float theta;
-	float ACCELERATION = 5.0f;
+	float ACCELERATION = 200.0f;
 
 	float Rotation = 0.0f;
 

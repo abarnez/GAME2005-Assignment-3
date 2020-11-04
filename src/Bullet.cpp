@@ -31,7 +31,7 @@ void Bullet::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the Bullet
-	TextureManager::Instance()->draw("Bullet", x, y, Rotation, 255, true);
+	TextureManager::Instance()->draw("Bullet", x, y, 0, 255, true);
 }
 
 
@@ -57,12 +57,20 @@ void Bullet::move()
 	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
 
-	//getRigidBody()->acceleration = glm::vec2(0.0f, Gravity);
-	//getRigidBody()->acceleration += Force / getRigidBody()->mass;
-	//getRigidBody()->velocity += getRigidBody()->acceleration;
-	//getTransform()->position += getRigidBody()->velocity * deltaTime;
+	if (getTransform()->position.y >= Config::SCREEN_HEIGHT - getWidth() / 2)
+	{
+		RandomPos();
+	}
+}
 
-	//Force = glm::vec2(0.0f, 0.0f);
-	//getRigidBody()->velocity *= 0.9f;
+void Bullet::RandomPos()
+{
+	float bulletHalfWidth = getWidth() / 2;
+	float randomPosX = rand() % Config::SCREEN_WIDTH - bulletHalfWidth + bulletHalfWidth;
+	getTransform()->position.x = randomPosX;
+	getTransform()->position.y = 0;
+	getRigidBody()->acceleration.y = Gravity * getRigidBody()->mass;
+	getRigidBody()->velocity.y = getRigidBody()->acceleration.y;
+	doesUpdate = true;
 }
 

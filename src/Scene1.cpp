@@ -19,10 +19,9 @@ Scene1::~Scene1()
 void Scene1::draw()
 {
 	TextureManager::Instance()->draw("background", 300.0f, 150.0f, 0, 255, true);
-	m_pTank->draw();
 	drawDisplayList();
-	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 
+	//SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 	if (EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
@@ -31,8 +30,49 @@ void Scene1::draw()
 
 void Scene1::update()
 {
-	
 	updateDisplayList();
+	// Create bullets at different time frame
+	if (createBullets)
+	{
+		currentTime = SDL_GetTicks();
+		if (currentTime > lastTime + 1000 * bulletSpawnTime)
+		{
+			lastTime = currentTime;
+			m_pBullet[bulletCount]->getTransform()->position = glm::vec2(0, 50);
+			m_pBullet[bulletCount]->RandomPos();
+			bulletCount++;
+		}
+		if (bulletCount == 10)
+		{
+			createBullets = false;
+		}
+	}
+
+	// Check collision of bullet to tank
+	for (int i = 0; i < 10; i++)
+	{
+		if (m_pBullet[i]->getTransform()->position.y >= m_pTank->getTransform()->position.y - m_pTank->getHeight())
+		{
+			glm::vec2 pos = m_pBullet[i]->getTransform()->position;
+			glm::vec2 pos2 = m_pTank->getTransform()->position;
+			float a = pos.x - pos2.x;
+			float b = pos.y - pos2.y;
+			float c = sqrt(a * a + b * b);
+
+			if (c < ((m_pBullet[i]->getHeight() / 2) + (m_pTank->getHeight() / 2)))
+			{
+				std::cout << "Hit height tank at " << c << "\n";
+				m_pBullet[i]->RandomPos();
+				SoundManager::Instance().playSound("Explode");
+			}
+			else if (c < ((m_pBullet[i]->getWidth() / 2) + (m_pTank->getWidth() / 2)))
+			{
+				std::cout << "Hit width tank at " << c << "\n";
+				m_pBullet[i]->RandomPos();
+				SoundManager::Instance().playSound("Explode");
+			}
+		}
+	}
 }
 
 void Scene1::clean()
@@ -65,26 +105,20 @@ void Scene1::handleEvents()
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
 
-
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
-	{
-		m_pTank->moveLeft();
-	}
+		m_pTank->move(-1);
+
 	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
-	{
-		m_pTank->moveRight();
-	}
+		m_pTank->move(1);
 
-	else {
-
-		m_pTank->stopMoving();
-	}
-
+	else
+		m_pTank->move(0);
 }
 
 void Scene1::start()
 {
-	TextureManager::Instance()->load("../Assets/textures/bg.jpg", "background");
+	TextureManager::Instance()->load("../Assets/textures/bg.jpg", "background"); 
+	SoundManager::Instance().load("../Assets/audio/explode.ogg", "Explode", SOUND_SFX);
 
 	// Set GUI Title
 	m_guiTitle = "Scene 1";
@@ -92,15 +126,27 @@ void Scene1::start()
 	// tanky tank stuff 
 	m_pTank = new Tank();
 	addChild(m_pTank);
-	m_pTank->getTransform()->position = glm::vec2(550,700);
+	m_pTank->getTransform()->position = glm::vec2(550, 750);
 
-	//bully bullet stuff
-	m_pBullet = new Bullet();
-	addChild(m_pBullet);
-	m_pBullet->getTransform()->position = glm::vec2(550, 100);
+	Speed = 9.8f;
+	bulletCount = 0;
+	createBullets = false;
+	lastTime = 0;
+	bulletSpawnTime = 0.5f;
+
+	for (int i = 0; i < 10; i++)
+	{
+		m_pBullet[i] = new Bullet();
+		addChild(m_pBullet[i]);
+		m_pBullet[i]->getTransform()->position.y = -100;
+		m_pBullet[i]->getRigidBody()->mass = 1;
+		m_pBullet[i]->pixelsPerMeter = 1;
+		m_pBullet[i]->Gravity = Speed;
+	}
+
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
-	m_pBackButton->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 700.0f);
+	m_pBackButton->getTransform()->position = glm::vec2(100, 50);
 	m_pBackButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pBackButton->setActive(false);
@@ -120,7 +166,7 @@ void Scene1::start()
 
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 750.0f);
+	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
 
 	addChild(m_pInstructionsLabel);
 }
@@ -130,6 +176,50 @@ void Scene1::GUI_Function()
 	ImGui::NewFrame();
 	
 	ImGui::Begin("Edit Variables", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	if (ImGui::Button("Play"))
+	{
+		createBullets = true;
+		bulletCount = 0;
+	}
+
+	if (ImGui::Button("Reset"))
+	{
+		createBullets = false;
+		for (int i = 0; i < 10; i++)
+		{
+			m_pBullet[i]->doesUpdate = false;
+			m_pBullet[i]->getTransform()->position.y = -100;
+		}
+	}
+
+	if (ImGui::Button("Pause"))
+	{
+
+	}
+
+	if (ImGui::SliderFloat("Bullet Spawn Time (s)", &bulletSpawnTime, 1.0f, 100.0f))
+	{
+		// Set label bitch
+	}
+
+	if (ImGui::SliderFloat("Mass (Kg)", &m_pTank->getRigidBody()->mass, 1.0f, 100.0f))
+	{
+		// Set label bitch
+	}
+
+	if (ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1.0f, 500.0f))
+	{
+		// Set label bitch
+	}
+
+	if (ImGui::SliderFloat("Gravity", &Speed, 1.0f, 500.0f))
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			m_pBullet[i]->pixelsPerMeter = Speed;
+		}
+		// Set label bitch
+	}
 
 	/*if (ImGui::Button("Play"))
 	{
@@ -149,16 +239,6 @@ void Scene1::GUI_Function()
 	{
 		m_pLootCrate->doesUpdate = false;
 	}
-
-	if (ImGui::SliderFloat("Position", &TrianglePosX, 0.0f, Config::SCREEN_WIDTH) && !m_pLootCrate->doesUpdate)
-		SetTriangle();
-
-	if (ImGui::SliderFloat("Ramp Height", &TriangleHeight, 0.0f, 300.0f) && !m_pLootCrate->doesUpdate)
-		SetTriangle();
-
-	if (ImGui::SliderFloat("Ramp Width", &TriangleWidth, 0.0f, 400.0f) && !m_pLootCrate->doesUpdate)
-		SetTriangle();
-
 	if (ImGui::SliderFloat("Mass (Kg)", &m_pLootCrate->Mass, 1.0f, 100.0f) && !m_pLootCrate->doesUpdate)
 		SetText();
 

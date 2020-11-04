@@ -19,18 +19,12 @@ public:
 
 	bool doesUpdate = false; 
 
-	float Gravity = 9.8f;
-
-	float Speed;
+	float Gravity;
 	float pixelsPerMeter;
 	float Mass;
 
-	float friction;
-	float theta;
-
-	float Rotation = 0.0f;
-
 	glm::vec2 Force;
+	void RandomPos();
 
 private:
 
@@ -41,6 +35,7 @@ private:
 	float m_currentHeading;
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
+
 };
 
 

@@ -27,7 +27,8 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Tank* m_pTank;
-	Bullet* m_pBullet;
+	Bullet* m_pBullet[10];
+	float Speed;
 
 	bool m_playerFacingRight;
 
@@ -35,6 +36,11 @@ private:
 	Button* m_pBackButton;
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
+
+	unsigned int lastTime, currentTime;
+	bool createBullets;
+	int bulletCount;
+	float bulletSpawnTime;
 
 	// mass, position, velocity, acceleration, force
 	Label* MassLabel{};
@@ -46,4 +52,5 @@ private:
 
 	void SetText();
 	void CreateLabels();
+	void SetRandomPos(Bullet* bullet);
 };

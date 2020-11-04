@@ -37,40 +37,24 @@ void Tank::draw()
 
 void Tank::update()
 {
-	if (getTransform()->position.x < 50)
-		getTransform()->position.x = 50;
-
-	if (getTransform()->position.x > 1050)
-		getTransform()->position.x = 1050;
-
-	//if (doesUpdate) move();
-
-	const float deltaTime = 1.0f / 60.f;
-	float magnitude = Util::magnitude(m_direction);
-
-	if (magnitude > 0) {
-
-
-		getRigidBody()->acceleration = Util::normalize(m_direction) * ACCELERATION;
-	}
-	else if (Util::magnitude(getRigidBody()->velocity) > 0) {
-
-		getRigidBody()->acceleration = Util::normalize(getRigidBody()->velocity * -ACCELERATION);
-
+	if (getTransform()->position.x < getWidth() / 2)
+	{
+		getTransform()->position.x = getWidth() / 2;
+		getRigidBody()->velocity.x = 0;
+		getRigidBody()->acceleration.x = 0;
+		m_direction.x = 1;
 	}
 
-	getRigidBody()->velocity += getRigidBody()->acceleration;
-
-	if (Util::magnitude(getRigidBody()->velocity) < ACCELERATION) {
-		getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	if (getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
+	{
+		getTransform()->position.x = Config::SCREEN_WIDTH - getWidth() / 2;
+		getRigidBody()->velocity.x = 0;
+		getRigidBody()->acceleration.x = 0;
+		m_direction.x = -1;
 	}
 
-	glm::vec2 pos = getTransform()->position;
-	pos.x += getRigidBody()->velocity.x * deltaTime;
-	pos.y += getRigidBody()->velocity.y * deltaTime;
-
-	getTransform()->position = pos;
+	float deltaTime = 1.0f / 60.0f;
+	getTransform()->position += getRigidBody()->velocity * deltaTime;
 }
 
 void Tank::clean()
@@ -83,28 +67,16 @@ void Tank::addForce(glm::vec2 Amount)
 	Force += Amount;
 }
 
-void Tank::move()
+/*void Tank::move()
 {
 	float deltaTime = 1.0f / 60.0f;
 
 	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
 	
+}*/
 
-}
-
-void Tank::moveLeft() {
-	
-	m_direction.x = -1;
-}
-
-void Tank::moveRight() {
-	//if (getTransform()->position.x < 800)
-	m_direction.x = 1;
-}
-
-void Tank::stopMoving() {
-	m_direction.x = 0;
-
+void Tank::move(float dir) {
+	getRigidBody()->velocity.x = dir * ACCELERATION;
 }
 
