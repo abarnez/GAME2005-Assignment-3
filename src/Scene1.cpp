@@ -133,6 +133,7 @@ void Scene1::start()
 	createBullets = false;
 	lastTime = 0;
 	bulletSpawnTime = 0.5f;
+	Mass = 1;
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -142,6 +143,7 @@ void Scene1::start()
 		m_pBullet[i]->getRigidBody()->mass = 1;
 		m_pBullet[i]->pixelsPerMeter = 1;
 		m_pBullet[i]->Gravity = Speed;
+		m_pBullet[i]->Mass = Mass;
 	}
 
 	// Back Button
@@ -197,22 +199,25 @@ void Scene1::GUI_Function()
 
 	}
 
-	if (ImGui::SliderFloat("Bullet Spawn Time (s)", &bulletSpawnTime, 1.0f, 100.0f))
+	if (ImGui::SliderFloat("Bullet Spawn Time (s)", &bulletSpawnTime, 0.5f, 5))
 	{
 		// Set label bitch
 	}
 
-	if (ImGui::SliderFloat("Mass (Kg)", &m_pTank->getRigidBody()->mass, 1.0f, 100.0f))
+	if (ImGui::SliderFloat("Bullet mass (Kg)", &Mass, 1, 10))
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			m_pBullet[i]->getRigidBody()->mass = Mass;
+		}
+	}
+
+	if (ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1, 1000))
 	{
 		// Set label bitch
 	}
 
-	if (ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1.0f, 500.0f))
-	{
-		// Set label bitch
-	}
-
-	if (ImGui::SliderFloat("Gravity", &Speed, 1.0f, 500.0f))
+	if (ImGui::SliderFloat("Gravity", &Speed, 1, 20))
 	{
 		for (int i = 0; i < 10; i++)
 		{
