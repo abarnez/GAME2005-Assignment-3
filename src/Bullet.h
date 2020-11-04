@@ -3,11 +3,11 @@
 #include "DisplayObject.h"
 #include "TextureManager.h"
 
-class LootCrate final : public DisplayObject
+class Bullet final : public DisplayObject
 {
 public:
-	LootCrate();
-	~LootCrate();
+	Bullet();
+	~Bullet();
 
 	// Inherited via GameObject
 	void draw() override;

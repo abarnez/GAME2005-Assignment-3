@@ -1,4 +1,4 @@
-#include "PlayScene.h"
+#include "Scene1.h"
 #include "Game.h"
 #include "EventManager.h"
 #include "Util.h"
@@ -8,27 +8,17 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-PlayScene::PlayScene()
+Scene1::Scene1()
 {
-	PlayScene::start();
+	Scene1::start();
 }
 
-PlayScene::~PlayScene()
+Scene1::~Scene1()
 = default;
 
-void PlayScene::draw()
+void Scene1::draw()
 {
 	TextureManager::Instance()->draw("background", 300.0f, 150.0f, 0, 255, true);
-
-	Util::DrawLine(Triangle[0], Triangle[1]);
-	Util::DrawLine(Triangle[1], Triangle[2]);
-	Util::DrawLine(Triangle[2], Triangle[0]);
-
-	// This makes the slope at the bottom, size of x position + 600
-	Util::DrawLine(Triangle[0], glm::vec2(Triangle[0].x + 600.0f, Triangle[0].y));
-
-	if (m_pLootCrate->doesUpdate)
-		SetText();
 
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
@@ -39,71 +29,18 @@ void PlayScene::draw()
 	}
 }
 
-void PlayScene::update()
+void Scene1::update()
 {
-	if (m_pLootCrate->doesUpdate)
-	{
-		if (!AddFriction) Friction = 0.0f;
-
-		float xAcceleration =
-			m_pLootCrate->Mass * m_pLootCrate->Gravity * cos(Theta);
-
-		float yAcceleration =
-			m_pLootCrate->Mass * m_pLootCrate->Gravity * sin(Theta);
-
-		float length = sqrt(TriangleWidth * TriangleWidth + TriangleHeight * TriangleHeight);
-		float finalVelocity = sqrt(2 * yAcceleration * length);
-
-		/*
-		
-		Does not look accurate, removed:
-
-		if (m_pLootCrate->getRigidBody()->velocity.x >= finalVelocity)
-		{
-			Theta = 0.0f;
-			yAcceleration = 0.0f; // mg - n
-			m_pLootCrate->Rotation = Theta;
-			m_pLootCrate->getRigidBody()->velocity.y = 0.0f;
-
-			xAcceleration = -Friction * m_pLootCrate->Mass * m_pLootCrate->Gravity; // -f * mg
-
-			if (m_pLootCrate->getRigidBody()->velocity.x <= 0)
-			{
-				// Come to a complete stop
-				xAcceleration = 0.0f;
-				m_pLootCrate->getRigidBody()->velocity.x = 0.0f;
-			}
-		}*/
-
-		if (m_pLootCrate->getTransform()->position.y >= Triangle[1].y - m_pLootCrate->getHeight() / 2)
-		{
-			Theta = 0.0f;
-			yAcceleration = 0.0f; // mg - n
-			m_pLootCrate->Rotation = Theta;
-			m_pLootCrate->getRigidBody()->velocity.y = 0.0f;
-
-			xAcceleration = -Friction * m_pLootCrate->Mass * m_pLootCrate->Gravity; // -f * mg
-
-			if (m_pLootCrate->getRigidBody()->velocity.x <= 0)
-			{
-				// Come to a complete stop
-				xAcceleration = 0.0f;
-				m_pLootCrate->getRigidBody()->velocity.x = 0.0f;
-			}
-		}
-
-		m_pLootCrate->getRigidBody()->acceleration = glm::vec2(xAcceleration, yAcceleration);
-	}
 	
 	updateDisplayList();
 }
 
-void PlayScene::clean()
+void Scene1::clean()
 {
 	removeAllChildren();
 }
 
-void PlayScene::handleEvents()
+void Scene1::handleEvents()
 {
 
 	EventManager::Instance().update();
@@ -115,38 +52,28 @@ void PlayScene::handleEvents()
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
-		TheGame::Instance()->changeSceneState(START_SCENE);
+		TheGame::Instance()->changeSceneState(SCENE_1);
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_2))
+	{
+		TheGame::Instance()->changeSceneState(SCENE_2);
+	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
 }
 
-void PlayScene::start()
+void Scene1::start()
 {
-	TextureManager::Instance()->load("../Assets/textures/background.jpg", "background");
+	TextureManager::Instance()->load("../Assets/textures/bg.jpg", "background");
 
 	// Set GUI Title
-	m_guiTitle = "Play Scene";
-
-	// Default values for triangle width, height, X, & Y
-	TriangleWidth = 400.0f;
-	TriangleHeight = 300.0f;
-	TrianglePosX = 150.0f;
-	TrianglePosY = 600.0f;
-
-	m_pLootCrate = new LootCrate();
-	m_pLootCrate->Mass = 12.8f; // 12.8 kg mass
-	m_pLootCrate->pixelsPerMeter = 1.0f; // 1.0 PPM
-	m_pLootCrate->Gravity = 9.8f;
-	addChild(m_pLootCrate);
-
-	CreateLabels();
-
-	SetTriangle();
+	m_guiTitle = "Scene 1";
 	
+
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	m_pBackButton->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 700.0f);
@@ -174,12 +101,13 @@ void PlayScene::start()
 	addChild(m_pInstructionsLabel);
 }
 
-void PlayScene::GUI_Function()
+void Scene1::GUI_Function()
 {
 	ImGui::NewFrame();
 	
 	ImGui::Begin("Edit Variables", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
-	if (ImGui::Button("Play"))
+
+	/*if (ImGui::Button("Play"))
 	{
 		m_pLootCrate->doesUpdate = true;
 	}
@@ -215,7 +143,7 @@ void PlayScene::GUI_Function()
 	if (AddFriction)
 	{
 		ImGui::SliderFloat("Friction", &Friction, 0.0f, 0.999f);
-	}
+	}*/
 
 	ImGui::Separator();
 
@@ -225,25 +153,9 @@ void PlayScene::GUI_Function()
 	ImGui::StyleColorsDark();
 }
 
-void PlayScene::SetTriangle()
+void Scene1::SetText()
 {
-	Triangle[0] = glm::vec2(TrianglePosX, TrianglePosY);
-	Triangle[1] = glm::vec2(TrianglePosX + TriangleWidth, TrianglePosY);
-	Triangle[2] = glm::vec2(TrianglePosX, TrianglePosY - TriangleHeight);
-
-	Theta = atan(TriangleHeight / TriangleWidth);
-
-	m_pLootCrate->Rotation = glm::degrees(Theta);
-
-	m_pLootCrate->getTransform()->position = 
-		glm::vec2(Triangle[2].x + m_pLootCrate->getWidth() / 2.5f, Triangle[2].y - m_pLootCrate->getHeight() / 2.5f);
-
-	SetText();
-}
-
-void PlayScene::SetText()
-{
-	std::string Text = "";
+/*	std::string Text = "";
 	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
 	MassLabel->setText(Text);
 
@@ -260,12 +172,12 @@ void PlayScene::SetText()
 	ForceLabel->setText(Text);
 
 	Text = "Theta: " + std::to_string(glm::degrees(Theta));
-	ThetaLabel->setText(Text);
+	ThetaLabel->setText(Text);*/
 }
 
-void PlayScene::CreateLabels()
+void Scene1::CreateLabels()
 {
-	const SDL_Color green = { 0, 255, 0, 255 };
+/*	const SDL_Color green = { 0, 255, 0, 255 };
 
 	std::string Text = "";
 	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
@@ -296,5 +208,5 @@ void PlayScene::CreateLabels()
 	Text = "Theta: " + std::to_string(glm::degrees(Theta));
 	ThetaLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 150.0f));
 	ThetaLabel->setParent(this);
-	addChild(ThetaLabel);
+	addChild(ThetaLabel);*/
 }

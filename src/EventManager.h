@@ -8,7 +8,6 @@
 #include "MouseButtons.h"
 #include "GameController.h"
 #include "imgui.h"
-#include "imgui.h"
 
 /* singleton with magic static */
 class EventManager

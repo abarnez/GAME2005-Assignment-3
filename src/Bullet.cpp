@@ -1,15 +1,15 @@
-#include "LootCrate.h"
+#include "Bullet.h"
 #include "glm/gtx/string_cast.hpp"
-#include "PlayScene.h"
+#include "Scene1.h"
 #include "TextureManager.h"
 #include "Util.h"
 #include "Game.h"
 
-LootCrate::LootCrate()
+Bullet::Bullet()
 {
-	TextureManager::Instance()->load("../Assets/textures/lootcrate.png", "LootCrate");
+	TextureManager::Instance()->load("../Assets/textures/bullet.png", "Bullet");
 
-	auto size = TextureManager::Instance()->getTextureSize("LootCrate");
+	auto size = TextureManager::Instance()->getTextureSize("Bullet");
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -17,40 +17,40 @@ LootCrate::LootCrate()
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
-	setType(LOOTCRATE);
+	setType(BULLET);
 }
 
 
-LootCrate::~LootCrate()
+Bullet::~Bullet()
 = default;
 
-void LootCrate::draw()
+void Bullet::draw()
 {
 	// alias for x and y
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	// draw the LootCrate
-	TextureManager::Instance()->draw("LootCrate", x, y, Rotation, 255, true);
+	// draw the Bullet
+	TextureManager::Instance()->draw("Bullet", x, y, Rotation, 255, true);
 }
 
 
-void LootCrate::update()
+void Bullet::update()
 {
 	if (doesUpdate) move();
 }
 
-void LootCrate::clean()
+void Bullet::clean()
 {
 
 }
 
-void LootCrate::addForce(glm::vec2 Amount)
+void Bullet::addForce(glm::vec2 Amount)
 {
 	Force += Amount;
 }
 
-void LootCrate::move()
+void Bullet::move()
 {
 	float deltaTime = 1.0f / 60.0f;
 

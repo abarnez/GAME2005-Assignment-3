@@ -18,7 +18,7 @@ void StartScene::draw()
 	drawDisplayList();
 
 	// DEBUG PURPOSES
-	//TheGame::Instance()->changeSceneState(PLAY_SCENE);
+	TheGame::Instance()->changeSceneState(SCENE_1);
 }
 
 void StartScene::update()
@@ -41,21 +41,26 @@ void StartScene::handleEvents()
 		TheGame::Instance()->quit();
 	}
 
-	if(EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+		TheGame::Instance()->changeSceneState(SCENE_1);
+	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_2))
+	{
+		TheGame::Instance()->changeSceneState(SCENE_2);
 	}
 }
 
 void StartScene::start()
 {
 	// Create background
-	TextureManager::Instance()->load("../Assets/textures/background.jpg", "background");
+	TextureManager::Instance()->load("../Assets/textures/bg.jpg", "background");
 
 	const SDL_Color green = { 0, 255, 0, 255 };
 	const SDL_Color cyan = { 0, 255, 255, 255 };
 
-	m_pStartLabel = new Label("Ramp Simulation", "Dock51", 60, cyan, glm::vec2(Config::SCREEN_WIDTH / 2, 250.0f));
+	m_pStartLabel = new Label("Minigames", "Dock51", 60, cyan, glm::vec2(Config::SCREEN_WIDTH / 2, 250.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 
@@ -75,7 +80,7 @@ void StartScene::start()
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pStartButton->setActive(false);
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+		TheGame::Instance()->changeSceneState(SCENE_1);
 	});
 	
 	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void

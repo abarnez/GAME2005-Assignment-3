@@ -1,17 +1,15 @@
 #pragma once
-#ifndef __PLAY_SCENE__
-#define __PLAY_SCENE__
 
 #include "Scene.h"
-#include "LootCrate.h"
+#include "Bullet.h"
 #include "Button.h"
 #include "Label.h"
 
-class PlayScene : public Scene
+class Scene2 : public Scene
 {
 public:
-	PlayScene();
-	~PlayScene();
+	Scene2();
+	~Scene2();
 
 	// Scene LifeCycle Functions
 	virtual void draw() override;
@@ -27,21 +25,8 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
-	LootCrate* m_pLootCrate;
+	//LootCrate* m_pLootCrate;
 	bool m_playerFacingRight;
-
-	glm::vec2 StormTrooperPos;
-	float Speed;
-
-	glm::vec2 Triangle[3];
-	float TriangleWidth;
-	float TriangleHeight;
-	float TrianglePosX;
-	float TrianglePosY;
-	float Friction;
-	float Theta;
-
-	bool AddFriction = false;
 
 	// UI Items
 	Button* m_pBackButton;
@@ -58,8 +43,4 @@ private:
 
 	void SetText();
 	void CreateLabels();
-
-	void SetTriangle();
 };
-
-#endif /* defined (__PLAY_SCENE__) */

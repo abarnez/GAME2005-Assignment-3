@@ -143,8 +143,11 @@ void Game::changeSceneState(const SceneState new_state)
 		case START_SCENE:
 			m_currentScene = new StartScene();
 			break;
-		case PLAY_SCENE:
-			m_currentScene = new PlayScene();
+		case SCENE_1:
+			m_currentScene = new Scene1();
+			break;
+		case SCENE_2:
+			m_currentScene = new Scene2();
 			break;
 		default:
 			break;

@@ -18,7 +18,7 @@ int main(int argc, char * args[])
 	AllocConsole();
 	freopen("CON", "w", stdout);
 
-	TheGame::Instance()->init("Physics Laws & Motion Simulation", 100, 100, 1100, 800, false);
+	TheGame::Instance()->init("Physics Minigames Simulations", 100, 100, 1100, 800, false);
 
 	while (TheGame::Instance()->isRunning())
 	{
