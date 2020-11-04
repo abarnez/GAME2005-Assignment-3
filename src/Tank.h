@@ -13,9 +13,13 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
+	
 
 	void addForce(glm::vec2 Amount);
 	void move();
+	void moveLeft();
+	void moveRight();
+	void stopMoving();
 
 	bool doesUpdate = false; 
 
@@ -27,6 +31,7 @@ public:
 
 	float friction;
 	float theta;
+	float ACCELERATION = 5.0f;
 
 	float Rotation = 0.0f;
 
@@ -37,6 +42,7 @@ private:
 	// steering behaviours
 	float m_maxSpeed;
 	float m_turnRate;
+	glm::vec2 m_direction;
 
 	float m_currentHeading;
 	glm::vec2 m_currentDirection;

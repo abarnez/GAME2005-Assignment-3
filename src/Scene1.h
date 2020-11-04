@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "Button.h"
 #include "Label.h"
+#include "Tank.h"
 
 class Scene1 : public Scene
 {
@@ -25,7 +26,8 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
-	//LootCrate* m_pLootCrate;
+	Tank* m_pTank;
+
 	bool m_playerFacingRight;
 
 	// UI Items

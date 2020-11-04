@@ -19,7 +19,7 @@ Scene1::~Scene1()
 void Scene1::draw()
 {
 	TextureManager::Instance()->draw("background", 300.0f, 150.0f, 0, 255, true);
-
+	m_pTank->draw();
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 
@@ -64,6 +64,22 @@ void Scene1::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
+
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
+	{
+		m_pTank->moveLeft();
+	}
+	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
+	{
+		m_pTank->moveRight();
+	}
+
+	else {
+
+		m_pTank->stopMoving();
+	}
+
 }
 
 void Scene1::start()
@@ -73,6 +89,10 @@ void Scene1::start()
 	// Set GUI Title
 	m_guiTitle = "Scene 1";
 	
+	// tanky tank stuff 
+	m_pTank = new Tank();
+	addChild(m_pTank);
+	m_pTank->getTransform()->position = glm::vec2(550,700);
 
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
