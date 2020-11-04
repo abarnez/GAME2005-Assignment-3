@@ -94,6 +94,10 @@ void Scene1::start()
 	addChild(m_pTank);
 	m_pTank->getTransform()->position = glm::vec2(550,700);
 
+	//bully bullet stuff
+	m_pBullet = new Bullet();
+	addChild(m_pBullet);
+	m_pBullet->getTransform()->position = glm::vec2(550, 100);
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	m_pBackButton->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 700.0f);

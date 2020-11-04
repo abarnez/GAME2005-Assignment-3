@@ -27,6 +27,7 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Tank* m_pTank;
+	Bullet* m_pBullet;
 
 	bool m_playerFacingRight;
 
