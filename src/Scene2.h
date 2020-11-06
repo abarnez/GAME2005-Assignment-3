@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "Paddle.h"
+#include "Ball.h"
 
 class Scene2 : public Scene
 {
@@ -34,6 +35,7 @@ private:
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
 	Paddle* m_pPaddle;
+	Ball* m_pBall;
 
 	// mass, position, velocity, acceleration, force
 	Label* MassLabel{};

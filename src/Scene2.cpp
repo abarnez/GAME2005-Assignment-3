@@ -84,35 +84,17 @@ void Scene2::start()
 	
 
 	// Back Button
-	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
-	m_pBackButton->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 700.0f);
-	m_pBackButton->addEventListener(CLICK, [&]()-> void
-	{
-		m_pBackButton->setActive(false);
-		TheGame::Instance()->changeSceneState(START_SCENE);
-	});
 
-	m_pBackButton->addEventListener(MOUSE_OVER, [&]()->void
-	{
-		m_pBackButton->setAlpha(128);
-	});
-
-	m_pBackButton->addEventListener(MOUSE_OUT, [&]()->void
-	{
-		m_pBackButton->setAlpha(255);
-	});
-	addChild(m_pBackButton);
-
-	/* Instructions Label */
-	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 750.0f);
-
-	addChild(m_pInstructionsLabel);
 
 	//Paddle
 	m_pPaddle = new Paddle();
 	addChild(m_pPaddle);
 	m_pPaddle->getTransform()->position = glm::vec2(550, 750);
+
+	//Ball
+	m_pBall = new Ball();
+	addChild(m_pBall);
+	m_pBall->getTransform()->position = glm::vec2(550, 50);
 }
 
 void Scene2::GUI_Function()

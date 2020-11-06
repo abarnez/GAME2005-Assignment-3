@@ -34,13 +34,13 @@ void Ball::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the Bullet
-	TextureManager::Instance()->draw("Bullet", x, y, 0, 255, true);
+	TextureManager::Instance()->draw("Ball", x, y, 0, 255, true);
 }
 
 
 void Ball::update()
 {
-	if (doesUpdate) move();
+	//if (doesUpdate) move();
 }
 
 void Ball::clean()
@@ -60,8 +60,5 @@ void Ball::move()
 	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
 
-	if (getTransform()->position.y >= Config::SCREEN_HEIGHT - getWidth() / 2)
-	{
-		RandomPos();
-	}
+	
 }

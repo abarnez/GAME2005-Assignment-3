@@ -123,6 +123,9 @@
     <ClCompile Include="..\src\BulletPool.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Ball.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -255,6 +258,9 @@
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\BulletPool.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Ball.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
