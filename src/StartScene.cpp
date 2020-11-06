@@ -80,7 +80,7 @@ void StartScene::start()
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pStartButton->setActive(false);
-		TheGame::Instance()->changeSceneState(SCENE_1);
+		TheGame::Instance()->changeSceneState(SCENE_2);
 	});
 	
 	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void

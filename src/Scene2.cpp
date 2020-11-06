@@ -68,7 +68,7 @@ void Scene2::handleEvents()
 
 void Scene2::start()
 {
-	TextureManager::Instance()->load("../Assets/textures/bg.jpg", "background");
+	TextureManager::Instance()->load("../Assets/textures/scene_2_bg.jpg", "background");
 
 	// Set GUI Title
 	m_guiTitle = "Scene 1";

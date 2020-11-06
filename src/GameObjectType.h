@@ -13,6 +13,7 @@ enum GameObjectType {
 	NEXT_BUTTON,
 	NUM_OF_TYPES,
 	BULLET,
-	TANK
+	TANK,
+	PADDLE
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */
