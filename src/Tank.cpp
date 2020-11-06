@@ -18,6 +18,8 @@ Tank::Tank()
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(TANK);
+	ACCELERATION = 200;
+	m_direction = glm::vec2(0, 0);
 }
 
 
@@ -31,7 +33,7 @@ void Tank::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the Tank
-	TextureManager::Instance()->draw("Tank", x, y, Rotation, 255, true);
+	TextureManager::Instance()->draw("Tank", x, y, 0, 255, true);
 }
 
 
@@ -60,11 +62,6 @@ void Tank::update()
 void Tank::clean()
 {
 
-}
-
-void Tank::addForce(glm::vec2 Amount)
-{
-	Force += Amount;
 }
 
 /*void Tank::move()
