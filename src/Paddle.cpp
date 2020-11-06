@@ -18,6 +18,9 @@ Paddle::Paddle()
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(PADDLE);
+
+	ACCELERATION = 200;
+	m_direction = glm::vec2(0, 0);
 }
 
 
@@ -31,50 +34,28 @@ void Paddle::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the Paddle
-	TextureManager::Instance()->draw("Paddle", x, y, Rotation, 255, true);
+	TextureManager::Instance()->draw("Paddle", x, y, 0, 255, true);
 }
 
 
 void Paddle::update()
 {
-	if (getTransform()->position.x < getWidth() / 2)
+	float deltaTime = 1.0f / 60.0f;
+	getTransform()->position += getRigidBody()->velocity * deltaTime;
+
+	if (getTransform()->position.x < getWidth() / 2 || getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
 	{
 		getTransform()->position.x = getWidth() / 2;
 		getRigidBody()->velocity.x = 0;
 		getRigidBody()->acceleration.x = 0;
-		m_direction.x = 1;
+		m_direction.x = 0;
 	}
-
-	if (getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
-	{
-		getTransform()->position.x = Config::SCREEN_WIDTH - getWidth() / 2;
-		getRigidBody()->velocity.x = 0;
-		getRigidBody()->acceleration.x = 0;
-		m_direction.x = -1;
-	}
-
-	float deltaTime = 1.0f / 60.0f;
-	getTransform()->position += getRigidBody()->velocity * deltaTime;
 }
 
 void Paddle::clean()
 {
 
 }
-
-void Paddle::addForce(glm::vec2 Amount)
-{
-	Force += Amount;
-}
-
-/*void Paddle::move()
-{
-	float deltaTime = 1.0f / 60.0f;
-
-	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
-	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
-
-}*/
 
 void Paddle::move(float dir) {
 	getRigidBody()->velocity.x = dir * ACCELERATION;

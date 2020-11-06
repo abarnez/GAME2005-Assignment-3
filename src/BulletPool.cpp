@@ -3,7 +3,6 @@
 BulletPool::BulletPool()
 {
 
-
 }
 
 

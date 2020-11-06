@@ -167,6 +167,7 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 	// circle
 	const auto circleCentre = object1->getTransform()->position;
 	const int circleRadius = std::max(object1->getWidth() * 0.5f, object1->getHeight() * 0.5f);
+
 	// aabb
 	const auto boxWidth = object2->getWidth();
 	int halfBoxWidth = boxWidth * 0.5f;
@@ -217,6 +218,44 @@ bool CollisionManager::pointRectCheck(const glm::vec2 point, const glm::vec2 rec
 	return false;
 }
 
+bool CollisionManager::sweptSphereCheck(GameObject* object1, GameObject* object2)
+{
+	// circle
+	const auto circleCentre = object1->getTransform()->position;
+	const int circleRadius = std::max(object1->getWidth() * 0.5f, object1->getHeight() * 0.5f);
+
+	// aabb
+	const auto boxWidth = object2->getWidth();
+	int halfBoxWidth = boxWidth * 0.5f;
+	const auto boxHeight = object2->getHeight();
+	int halfBoxHeight = boxHeight * 0.5f;
+
+	const auto boxStart = object2->getTransform()->position - glm::vec2(boxWidth * 0.5f, boxHeight * 0.5f);
+
+	if (circleAABBsquaredDistance(circleCentre, circleRadius, boxStart, boxWidth, boxHeight) <= (circleRadius * circleRadius))
+	{
+		if (!object2->getRigidBody()->isColliding) {
+
+			object2->getRigidBody()->isColliding = true;
+
+			const auto attackVector = object1->getTransform()->position - object2->getTransform()->position;
+			const auto normal = glm::vec2(0.0f, -1.0f);
+
+			const auto dot = Util::dot(attackVector, normal);
+			const auto angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
+
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		object2->getRigidBody()->isColliding = false;
+		return false;
+	}
+
+	return false;
+}
 
 CollisionManager::CollisionManager()
 = default;

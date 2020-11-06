@@ -52,26 +52,10 @@ void Scene1::update()
 	// Change to sphere collision - swept spheres
 	for (int i = 0; i < 10; i++)
 	{
-		if (m_pBullet[i]->getTransform()->position.y >= m_pTank->getTransform()->position.y - m_pTank->getHeight())
+		if (CollisionManager::circleAABBCheck(m_pBullet[i], m_pTank))
 		{
-			glm::vec2 pos = m_pBullet[i]->getTransform()->position;
-			glm::vec2 pos2 = m_pTank->getTransform()->position;
-			float a = pos.x - pos2.x;
-			float b = pos.y - pos2.y;
-			float c = sqrt(a * a + b * b);
-
-			if (c < ((m_pBullet[i]->getHeight() / 2) + (m_pTank->getHeight() / 2)))
-			{
-				std::cout << "Hit height tank at " << c << "\n";
-				m_pBullet[i]->RandomPos();
-				SoundManager::Instance().playSound("Explode");
-			}
-			else if (c < ((m_pBullet[i]->getWidth() / 2) + (m_pTank->getWidth() / 2)))
-			{
-				std::cout << "Hit width tank at " << c << "\n";
-				m_pBullet[i]->RandomPos();
-				SoundManager::Instance().playSound("Explode");
-			}
+			m_pBullet[i]->RandomPos();
+			SoundManager::Instance().playSound("Explode");
 		}
 	}
 }
@@ -202,50 +186,21 @@ void Scene1::GUI_Function()
 
 	if (ImGui::SliderFloat("Bullet Spawn Time (s)", &bulletSpawnTime, 0.5f, 5))
 	{
-		// Set label bitch
+
 	}
 
 	if (ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1, 1000))
 	{
-		// Set label bitch
+		// SET LABELS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
-	if (ImGui::SliderFloat("Gravity", &Speed, 1, 100))
+	if (ImGui::SliderFloat("Gravity", &Speed, 1, 1000))
 	{
 		for (int i = 0; i < 10; i++)
 		{
 			m_pBullet[i]->pixelsPerMeter = Speed;
 		}
-		// Set label bitch
 	}
-
-	/*if (ImGui::Button("Play"))
-	{
-		m_pLootCrate->doesUpdate = true;
-	}
-
-	if (ImGui::Button("Reset"))
-	{
-		m_pLootCrate->doesUpdate = false;
-		SetTriangle();
-		m_pLootCrate->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		m_pLootCrate->getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-		SetText();
-	}
-
-	if (ImGui::Button("Pause"))
-	{
-		m_pLootCrate->doesUpdate = false;
-	}
-	if (ImGui::SliderFloat("Mass (Kg)", &m_pLootCrate->Mass, 1.0f, 100.0f) && !m_pLootCrate->doesUpdate)
-		SetText();
-
-	ImGui::Checkbox("Add friction?", &AddFriction);
-
-	if (AddFriction)
-	{
-		ImGui::SliderFloat("Friction", &Friction, 0.0f, 0.999f);
-	}*/
 
 	ImGui::Separator();
 

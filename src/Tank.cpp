@@ -39,39 +39,23 @@ void Tank::draw()
 
 void Tank::update()
 {
-	if (getTransform()->position.x < getWidth() / 2)
-	{
-		getTransform()->position.x = getWidth() / 2;
-		getRigidBody()->velocity.x = 0;
-		getRigidBody()->acceleration.x = 0;
-		m_direction.x = 1;
-	}
-
-	if (getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
-	{
-		getTransform()->position.x = Config::SCREEN_WIDTH - getWidth() / 2;
-		getRigidBody()->velocity.x = 0;
-		getRigidBody()->acceleration.x = 0;
-		m_direction.x = -1;
-	}
-
 	float deltaTime = 1.0f / 60.0f;
 	getTransform()->position += getRigidBody()->velocity * deltaTime;
+
+	if (getTransform()->position.x < getWidth() / 2 || getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
+	{
+		getTransform()->position.x = getTransform()->position.x - getWidth() / 2;
+		//getWidth() / 2;
+		getRigidBody()->velocity.x = 0;
+		getRigidBody()->acceleration.x = 0;
+		m_direction.x = 0;
+	}
 }
 
 void Tank::clean()
 {
 
 }
-
-/*void Tank::move()
-{
-	float deltaTime = 1.0f / 60.0f;
-
-	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
-	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
-	
-}*/
 
 void Tank::move(float dir) {
 	getRigidBody()->velocity.x = dir * ACCELERATION;
