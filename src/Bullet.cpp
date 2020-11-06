@@ -18,6 +18,10 @@ Bullet::Bullet()
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(BULLET);
+
+	pixelsPerMeter = 1;
+	Gravity = 9.8f;
+	Mass = 1;
 }
 
 
@@ -69,7 +73,7 @@ void Bullet::RandomPos()
 	float randomPosX = rand() % Config::SCREEN_WIDTH - bulletHalfWidth + bulletHalfWidth;
 	getTransform()->position.x = randomPosX;
 	getTransform()->position.y = 0;
-	getRigidBody()->acceleration.y = Gravity * getRigidBody()->mass;
+	getRigidBody()->acceleration.y = Gravity;
 	getRigidBody()->velocity.y = getRigidBody()->acceleration.y;
 	doesUpdate = true;
 }

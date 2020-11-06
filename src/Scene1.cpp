@@ -49,6 +49,7 @@ void Scene1::update()
 	}
 
 	// Check collision of bullet to tank
+	// Change to sphere collision - swept spheres
 	for (int i = 0; i < 10; i++)
 	{
 		if (m_pBullet[i]->getTransform()->position.y >= m_pTank->getTransform()->position.y - m_pTank->getHeight())
@@ -204,20 +205,12 @@ void Scene1::GUI_Function()
 		// Set label bitch
 	}
 
-	if (ImGui::SliderFloat("Bullet mass (Kg)", &Mass, 1, 10))
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			m_pBullet[i]->getRigidBody()->mass = Mass;
-		}
-	}
-
 	if (ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1, 1000))
 	{
 		// Set label bitch
 	}
 
-	if (ImGui::SliderFloat("Gravity", &Speed, 1, 20))
+	if (ImGui::SliderFloat("Gravity", &Speed, 1, 100))
 	{
 		for (int i = 0; i < 10; i++)
 		{

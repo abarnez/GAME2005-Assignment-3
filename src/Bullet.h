@@ -26,16 +26,6 @@ public:
 	glm::vec2 Force;
 	void RandomPos();
 
-private:
-
-	// steering behaviours
-	float m_maxSpeed;
-	float m_turnRate;
-
-	float m_currentHeading;
-	glm::vec2 m_currentDirection;
-	glm::vec2 m_targetPosition;
-
 };
 
 
