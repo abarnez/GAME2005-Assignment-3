@@ -76,6 +76,8 @@ void StartScene::start()
 	m_pStartButton = new Button();
 	m_pStartButton->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 600.0f);
 
+	
+
 
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 	{

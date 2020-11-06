@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "Button.h"
 #include "Label.h"
+#include "Paddle.h"
 
 class Scene2 : public Scene
 {
@@ -32,6 +33,7 @@ private:
 	Button* m_pBackButton;
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
+	Paddle* m_pPaddle;
 
 	// mass, position, velocity, acceleration, force
 	Label* MassLabel{};

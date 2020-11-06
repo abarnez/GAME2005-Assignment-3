@@ -64,6 +64,15 @@ void Scene2::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
+		m_pPaddle->move(-1);
+
+	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
+		m_pPaddle->move(1);
+
+	else
+		m_pPaddle->move(0);
 }
 
 void Scene2::start()
@@ -99,6 +108,11 @@ void Scene2::start()
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 750.0f);
 
 	addChild(m_pInstructionsLabel);
+
+	//Paddle
+	m_pPaddle = new Paddle();
+	addChild(m_pPaddle);
+	m_pPaddle->getTransform()->position = glm::vec2(550, 750);
 }
 
 void Scene2::GUI_Function()

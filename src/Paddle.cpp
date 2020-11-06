@@ -7,7 +7,7 @@
 
 Paddle::Paddle()
 {
-	TextureManager::Instance()->load("../Assets/textures/player_sprite.png", "Paddle");
+	TextureManager::Instance()->load("../Assets/textures/paddle.png", "Paddle");
 
 	auto size = TextureManager::Instance()->getTextureSize("Paddle");
 	setWidth(size.x);
