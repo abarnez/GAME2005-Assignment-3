@@ -14,6 +14,7 @@ enum GameObjectType {
 	NUM_OF_TYPES,
 	BULLET,
 	TANK,
-	PADDLE
+	PADDLE,
+	BALL
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */
