@@ -107,7 +107,7 @@ void Scene1::update()
 		}
 
 		// Hit bottom of screen
-		if (nextY >= Config::SCREEN_HEIGHT - m_pBullet[i]->getWidth() / 2)
+		if (nextY >= Config::SCREEN_HEIGHT - m_pBullet[i]->getHeight() / 2)
 		{
 			m_pBullet[i]->RandomPos();
 		}
