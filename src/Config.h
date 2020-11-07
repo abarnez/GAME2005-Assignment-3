@@ -17,6 +17,7 @@ public:
 	static const int MINE_NUM = 50;
 	static const int SCORE = 0;
 	static const int LIVES = 5;
+	static const int FPS = 60;
 
 	// Define Custom Deleters for shared_ptr types
 	static void SDL_DelRes(SDL_Window* r) { SDL_DestroyWindow(r); }

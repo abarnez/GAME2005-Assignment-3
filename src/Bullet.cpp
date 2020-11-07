@@ -33,7 +33,25 @@ void Bullet::draw()
 	// alias for x and y
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
-
+	float bw = getWidth();
+	float bh = getHeight();
+	glm::vec2 bpos[4];
+	// Bottom-Left
+	bpos[0] = glm::vec2(x - bw / 4, y + bh / 2);
+	// Bottom-Right
+	bpos[1] = glm::vec2(x + bw / 3, y + bh / 2);
+	// Top-Left
+	bpos[2] = glm::vec2(x - bw / 4, y - bh / 2);
+	// Top-Right
+	bpos[3] = glm::vec2(x + bw / 3, y - bh / 2);
+	// Bottom
+	Util::DrawLine(bpos[0], bpos[1]);
+	// Top
+	Util::DrawLine(bpos[2], bpos[3]);
+	// Left
+	Util::DrawLine(bpos[0], bpos[2]);
+	// Right
+	Util::DrawLine(bpos[1], bpos[3]);
 	// draw the Bullet
 	TextureManager::Instance()->draw("Bullet", x, y, 0, 255, true);
 }
@@ -56,15 +74,13 @@ void Bullet::addForce(glm::vec2 Amount)
 
 void Bullet::move()
 {
-	float deltaTime = 1.0f / 60.0f;
+	float deltaTime = 1.0f / Config::FPS;
 
 	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
 
-	if (getTransform()->position.y >= Config::SCREEN_HEIGHT - getWidth() / 2)
-	{
-		RandomPos();
-	}
+	lastX = getTransform()->position.x;
+	lastY = getTransform()->position.y;
 }
 
 void Bullet::RandomPos()

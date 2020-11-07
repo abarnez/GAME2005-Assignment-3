@@ -22,6 +22,7 @@ public:
 	float Gravity;
 	float pixelsPerMeter;
 	float Mass;
+	float lastX, lastY;
 
 	glm::vec2 Force;
 	void RandomPos();

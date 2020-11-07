@@ -14,8 +14,11 @@ public:
 	void update() override;
 	void clean() override;
 	void move(float dir);
+	void freeze();
 
 	float ACCELERATION;
+
+	float lastX, lastY;
 
 private:
 	glm::vec2 m_direction;

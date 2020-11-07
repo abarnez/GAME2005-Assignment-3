@@ -14,6 +14,7 @@ public:
 	void update() override;
 	void clean() override;
 	void move(float dir);
+	void freeze();
 
 	bool doesUpdate = false;
 	float ACCELERATION = 200.0f;

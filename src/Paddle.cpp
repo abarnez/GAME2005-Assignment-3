@@ -43,12 +43,15 @@ void Paddle::update()
 	float deltaTime = 1.0f / 60.0f;
 	getTransform()->position += getRigidBody()->velocity * deltaTime;
 
-	if (getTransform()->position.x < getWidth() / 2 || getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
+	if (getTransform()->position.x < getWidth() / 2)
 	{
 		getTransform()->position.x = getWidth() / 2;
-		getRigidBody()->velocity.x = 0;
-		getRigidBody()->acceleration.x = 0;
-		m_direction.x = 0;
+		freeze();
+	}
+	else if (getTransform()->position.x > Config::SCREEN_WIDTH - getWidth() / 2)
+	{
+		getTransform()->position.x = Config::SCREEN_WIDTH - getWidth() / 2;
+		freeze();
 	}
 }
 
@@ -59,5 +62,12 @@ void Paddle::clean()
 
 void Paddle::move(float dir) {
 	getRigidBody()->velocity.x = dir * ACCELERATION;
+}
+
+void Paddle::freeze()
+{
+	getRigidBody()->velocity.x = 0;
+	getRigidBody()->acceleration.x = 0;
+	m_direction.x = 0;
 }
 
