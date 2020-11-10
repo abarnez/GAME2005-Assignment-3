@@ -76,8 +76,9 @@ void Scene1::update()
 		float bh = m_pBullet[i]->getHeight();
 		//float lastX = m_pBullet[i]->lastX, lastY = m_pBullet[i]->lastY;
 		float curX = m_pBullet[i]->getTransform()->position.x, curY = m_pBullet[i]->getTransform()->position.y;
-		float nextX = curX + (m_pBullet[i]->getRigidBody()->velocity.x * deltaTime);
-		float nextY = curY + (m_pBullet[i]->getRigidBody()->velocity.y * deltaTime);
+		glm::vec2 nextPos = m_pBullet[i]->getTransform()->position + m_pBullet[i]->getRigidBody()->velocity * deltaTime * m_pBullet[i]->pixelsPerMeter;
+		float nextX = nextPos.x;
+		float nextY = nextPos.y;
 
 		glm::vec2 bpos[4];
 		// Bottom-Left
@@ -93,18 +94,18 @@ void Scene1::update()
 		if (CollisionManager::doesCollide(pos[2], pos[3], bpos[2], bpos[3]))
 		{
 			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
-			std::cout << "cur pos HIT top tank collider " << "x: " << bpos[0].x << "\n";
+			std::cout << "cur pos HIT top tank collider " << "curY: " << bpos[2].y << "nextY: " << nextY << "\n";
 			SoundManager::Instance().playSound("Explode");
 			m_pBullet[i]->RandomPos();
 		}
 		else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[2], bpos[3]))
 		{
 			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
-			std::cout << "cur pos HIT bottom tank collider " << "x: " << bpos[0].x << "\n";
+			std::cout << "cur pos HIT bottom tank collider " << "curY: " << bpos[0].y << "nextY: " << nextY << "\n";
 			SoundManager::Instance().playSound("Explode");
 			m_pBullet[i]->RandomPos();
 		}
-		/*else if (CollisionManager::doesCollide(pos[2], pos[3], bpos[0], bpos[1]))
+		else if (CollisionManager::doesCollide(pos[2], pos[3], bpos[0], bpos[1]))
 		{
 			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
 			std::cout << "next pos HIT top tank collider " << "x: " << bpos[0].x << "\n";
@@ -117,7 +118,7 @@ void Scene1::update()
 			std::cout << "next pos HIT bottom tank collider " << "x: " << bpos[0].x << "\n";
 			SoundManager::Instance().playSound("Explode");
 			m_pBullet[i]->RandomPos();
-		}*/
+		}
 
 		// Hit bottom of screen
 		if (curY >= Config::SCREEN_HEIGHT - m_pBullet[i]->getHeight() / 2)
