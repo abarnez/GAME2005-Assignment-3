@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "Tank.h"
+#include "BulletPool.h"
 
 class Scene1 : public Scene
 {
@@ -26,6 +27,9 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
+	BulletPool* m_pPool;
+
+	int maxNumBullets;
 	static const int maxBullets = 10;
 	Tank* m_pTank;
 	Bullet* m_pBullet[maxBullets];
@@ -55,5 +59,4 @@ private:
 
 	void SetText();
 	void CreateLabels();
-	void SetRandomPos(Bullet* bullet);
 };

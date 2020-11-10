@@ -4,11 +4,15 @@
 class BulletPool
 {
 public:
-	BulletPool();
+	BulletPool(unsigned int);
 	~BulletPool();
 
-private:
+	Bullet* Spawn();
 
+	void Despawn(Bullet*);
+private:
+	std::vector<Bullet*> active;
+	std::vector<Bullet*> inactive;
 };
 
 

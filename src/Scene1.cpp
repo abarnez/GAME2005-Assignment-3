@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "imgui_sdl.h"
 #include "Renderer.h"
+#include <algorithm>
 
 Scene1::Scene1()
 {
@@ -73,42 +74,53 @@ void Scene1::update()
 	{
 		float bw = m_pBullet[i]->getWidth();
 		float bh = m_pBullet[i]->getHeight();
-		float lastX = m_pBullet[i]->lastX, lastY = m_pBullet[i]->lastY;
-		float nextX = lastX + (m_pBullet[i]->getRigidBody()->velocity.x * deltaTime);
-		float nextY = lastY + (m_pBullet[i]->getRigidBody()->velocity.y * deltaTime);
+		//float lastX = m_pBullet[i]->lastX, lastY = m_pBullet[i]->lastY;
+		float curX = m_pBullet[i]->getTransform()->position.x, curY = m_pBullet[i]->getTransform()->position.y;
+		float nextX = curX + (m_pBullet[i]->getRigidBody()->velocity.x * deltaTime);
+		float nextY = curY + (m_pBullet[i]->getRigidBody()->velocity.y * deltaTime);
 
 		glm::vec2 bpos[4];
 		// Bottom-Left
 		bpos[0] = glm::vec2(nextX - bw / 4, nextY + bh / 2);
 		// Bottom-Right
 		bpos[1] = glm::vec2(nextX + bw / 3, nextY + bh / 2);
-		//* Top: 0 - 1
-		//* Top-Top: 4 - 5
 
-		// Hit collision box on top of tank
-		if (((bpos[0].x <= pos[2].x && bpos[1].x >= pos[2].x) || (bpos[1].x >= pos[3].x && bpos[0].x <= pos[3].x)
-			|| bpos[0].x >= pos[2].x && bpos[1].x <= pos[3].x)
-			&& bpos[0].y >= pos[3].y)
+		// Bottom-Left current
+		bpos[2] = glm::vec2(curX - bw / 4, curY + bh / 2);
+		// Bottom-Right current
+		bpos[3] = glm::vec2(curX + bw / 3, curY + bh / 2); 
+
+		if (CollisionManager::doesCollide(pos[2], pos[3], bpos[2], bpos[3]))
+		{
+			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
+			std::cout << "cur pos HIT top tank collider " << "x: " << bpos[0].x << "\n";
+			SoundManager::Instance().playSound("Explode");
+			m_pBullet[i]->RandomPos();
+		}
+		else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[2], bpos[3]))
+		{
+			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
+			std::cout << "cur pos HIT bottom tank collider " << "x: " << bpos[0].x << "\n";
+			SoundManager::Instance().playSound("Explode");
+			m_pBullet[i]->RandomPos();
+		}
+		/*else if (CollisionManager::doesCollide(pos[2], pos[3], bpos[0], bpos[1]))
 		{
 			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
 			std::cout << "next pos HIT top tank collider " << "x: " << bpos[0].x << "\n";
 			SoundManager::Instance().playSound("Explode");
 			m_pBullet[i]->RandomPos();
 		}
-
-		// Hit collision box on bottom of tank
-		else if(((bpos[0].x <= pos[0].x && bpos[1].x >= pos[0].x) || (bpos[1].x >= pos[1].x && bpos[0].x <= pos[1].x)
-			|| bpos[0].x >= pos[0].x && bpos[1].x <= pos[1].x)
-			&& bpos[0].y >= pos[0].y)
+		else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[0], bpos[1]))
 		{
 			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
 			std::cout << "next pos HIT bottom tank collider " << "x: " << bpos[0].x << "\n";
 			SoundManager::Instance().playSound("Explode");
 			m_pBullet[i]->RandomPos();
-		}
+		}*/
 
 		// Hit bottom of screen
-		if (nextY >= Config::SCREEN_HEIGHT - m_pBullet[i]->getHeight() / 2)
+		if (curY >= Config::SCREEN_HEIGHT - m_pBullet[i]->getHeight() / 2)
 		{
 			m_pBullet[i]->RandomPos();
 		}
@@ -186,6 +198,14 @@ void Scene1::start()
 		m_pBullet[i]->Mass = Mass;
 	}
 
+	/*m_pPool = new BulletPool(maxNumBullets);
+	for (int i = 0; i < 10; i++)
+	{
+		Bullet* bullet = m_pPool->Spawn();
+		addChild(bullet);
+		bullet->RandomPos();
+	}*/
+
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	m_pBackButton->getTransform()->position = glm::vec2(100, 50);
@@ -236,7 +256,10 @@ void Scene1::GUI_Function()
 
 	if (ImGui::Button("Pause"))
 	{
-
+		for (int i = 0; i < maxBullets; i++)
+		{
+			m_pBullet[i]->doesUpdate = false;
+		}
 	}
 
 	if (ImGui::SliderFloat("Bullet Spawn Time (s)", &bulletSpawnTime, 0.5f, 5))
@@ -249,7 +272,7 @@ void Scene1::GUI_Function()
 		// SET LABELS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
-	if (ImGui::SliderFloat("Gravity", &Speed, 1, 1000))
+	if (ImGui::SliderFloat("Gravity", &Speed, 1, 5000))
 	{
 		for (int i = 0; i < maxBullets; i++)
 		{

@@ -67,17 +67,6 @@ void Scene2::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
-
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
-		m_pPaddle->move(-1);
-
-	
-
-	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
-		m_pPaddle->move(1);
-
-	else
-		m_pPaddle->move(0);
 }
 
 void Scene2::start()
@@ -85,11 +74,8 @@ void Scene2::start()
 	TextureManager::Instance()->load("../Assets/textures/scene_2_bg.jpg", "background");
 
 	// Set GUI Title
-	m_guiTitle = "Scene 1";
+	m_guiTitle = "Scene 2";
 	
-
-	// Back Button
-
 	SDL_ShowCursor(0);
 	//Paddle
 	m_pPaddle = new Paddle();
@@ -120,30 +106,6 @@ void Scene2::GUI_Function()
 		m_pLootCrate->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 		m_pLootCrate->getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 		SetText();
-	}
-
-	if (ImGui::Button("Pause"))
-	{
-		m_pLootCrate->doesUpdate = false;
-	}
-
-	if (ImGui::SliderFloat("Position", &TrianglePosX, 0.0f, Config::SCREEN_WIDTH) && !m_pLootCrate->doesUpdate)
-		SetTriangle();
-
-	if (ImGui::SliderFloat("Ramp Height", &TriangleHeight, 0.0f, 300.0f) && !m_pLootCrate->doesUpdate)
-		SetTriangle();
-
-	if (ImGui::SliderFloat("Ramp Width", &TriangleWidth, 0.0f, 400.0f) && !m_pLootCrate->doesUpdate)
-		SetTriangle();
-
-	if (ImGui::SliderFloat("Mass (Kg)", &m_pLootCrate->Mass, 1.0f, 100.0f) && !m_pLootCrate->doesUpdate)
-		SetText();
-
-	ImGui::Checkbox("Add friction?", &AddFriction);
-
-	if (AddFriction)
-	{
-		ImGui::SliderFloat("Friction", &Friction, 0.0f, 0.999f);
 	}*/
 
 	ImGui::Separator();
