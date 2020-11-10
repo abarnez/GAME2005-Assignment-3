@@ -1,7 +1,7 @@
 #include "CollisionManager.h"
 #include "Util.h"
 #include <algorithm>
-
+#include <limits>
 
 
 int CollisionManager::squaredDistance(const glm::vec2 p1, const glm::vec2 p2)
@@ -212,6 +212,17 @@ bool CollisionManager::pointRectCheck(const glm::vec2 point, const glm::vec2 rec
 		point.x < topLeftX + width &&
 		point.y > topLeftY&&
 		point.y < topLeftY + height)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CollisionManager::doesCollide(glm::vec2 topLeft, glm::vec2 topRight, glm::vec2 bottomLeft, glm::vec2 bottomRight)
+{
+	if (((bottomLeft.x <= topLeft.x && bottomRight.x >= topLeft.x) || (bottomRight.x >= topRight.x && bottomLeft.x <= topRight.x)
+		|| bottomLeft.x >= topLeft.x && bottomRight.x <= topRight.x)
+		&& bottomLeft.y >= topRight.y)
 	{
 		return true;
 	}

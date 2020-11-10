@@ -18,7 +18,6 @@ Ball::Ball()
 	getRigidBody()->acceleration = glm::vec2(10.0f, 10.0f);
 	getRigidBody()->isColliding = false;
 	setType(BALL);
-	
 
 	pixelsPerMeter = 1;
 	Gravity = 9.8f;
@@ -42,8 +41,6 @@ void Ball::draw()
 void Ball::update()
 {
 	move();
-
-
 }
 
 void Ball::clean()

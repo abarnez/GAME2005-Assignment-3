@@ -27,6 +27,8 @@ public:
 	glm::vec2 Force;
 	void RandomPos();
 
+	bool active;
+
 };
 
 
