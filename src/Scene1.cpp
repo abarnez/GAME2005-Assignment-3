@@ -42,7 +42,7 @@ void Scene1::update()
 			m_pBullet[bulletCount]->RandomPos();
 			bulletCount++;
 		}
-		if (bulletCount == 10)
+		if (bulletCount == maxBullets)
 		{
 			createBullets = false;
 		}
@@ -69,7 +69,7 @@ void Scene1::update()
 
 	float deltaTime = 1.0f / Config::FPS;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < maxBullets; i++)
 	{
 		float bw = m_pBullet[i]->getWidth();
 		float bh = m_pBullet[i]->getHeight();
@@ -95,6 +95,7 @@ void Scene1::update()
 			SoundManager::Instance().playSound("Explode");
 			m_pBullet[i]->RandomPos();
 		}
+
 		// Hit collision box on bottom of tank
 		else if(((bpos[0].x <= pos[0].x && bpos[1].x >= pos[0].x) || (bpos[1].x >= pos[1].x && bpos[0].x <= pos[1].x)
 			|| bpos[0].x >= pos[0].x && bpos[1].x <= pos[1].x)
@@ -174,7 +175,7 @@ void Scene1::start()
 	bulletSpawnTime = 0.5f;
 	Mass = 1;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < maxBullets; i++)
 	{
 		m_pBullet[i] = new Bullet();
 		addChild(m_pBullet[i]);
@@ -226,7 +227,7 @@ void Scene1::GUI_Function()
 	if (ImGui::Button("Reset"))
 	{
 		createBullets = false;
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < maxBullets; i++)
 		{
 			m_pBullet[i]->doesUpdate = false;
 			m_pBullet[i]->getTransform()->position.y = -100;
@@ -250,7 +251,7 @@ void Scene1::GUI_Function()
 
 	if (ImGui::SliderFloat("Gravity", &Speed, 1, 1000))
 	{
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < maxBullets; i++)
 		{
 			m_pBullet[i]->pixelsPerMeter = Speed;
 		}

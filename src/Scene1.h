@@ -26,8 +26,9 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
+	static const int maxBullets = 10;
 	Tank* m_pTank;
-	Bullet* m_pBullet[10];
+	Bullet* m_pBullet[maxBullets];
 	float Speed;
 
 	bool m_playerFacingRight;
