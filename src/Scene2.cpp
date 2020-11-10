@@ -31,7 +31,10 @@ void Scene2::draw()
 
 void Scene2::update()
 {
-	
+	SDL_GetMouseState(&mouse_x, &mouse_y);
+
+	m_pPaddle->getTransform()->position.x = mouse_x;
+
 	updateDisplayList();
 }
 
@@ -68,6 +71,8 @@ void Scene2::handleEvents()
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
 		m_pPaddle->move(-1);
 
+	
+
 	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		m_pPaddle->move(1);
 
@@ -85,7 +90,7 @@ void Scene2::start()
 
 	// Back Button
 
-
+	SDL_ShowCursor(0);
 	//Paddle
 	m_pPaddle = new Paddle();
 	addChild(m_pPaddle);

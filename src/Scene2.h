@@ -36,7 +36,8 @@ private:
 	Label* m_pInstructionsLabel;
 	Paddle* m_pPaddle;
 	Ball* m_pBall;
-
+	int mouse_x;
+	int mouse_y;
 	// mass, position, velocity, acceleration, force
 	Label* MassLabel{};
 	Label* PositionLabel{};

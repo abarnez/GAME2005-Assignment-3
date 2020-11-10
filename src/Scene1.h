@@ -42,6 +42,7 @@ private:
 	int bulletCount;
 	float bulletSpawnTime;
 	float Mass;
+	
 
 	// mass, position, velocity, acceleration, force
 	Label* MassLabel{};
