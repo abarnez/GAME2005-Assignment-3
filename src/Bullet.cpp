@@ -76,11 +76,12 @@ void Bullet::move()
 {
 	float deltaTime = 1.0f / Config::FPS;
 
+	lastX = getTransform()->position.x;
+	lastY = getTransform()->position.y;
+
 	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 	getTransform()->position += getRigidBody()->velocity * deltaTime * pixelsPerMeter;
 
-	lastX = getTransform()->position.x;
-	lastY = getTransform()->position.y;
 }
 
 void Bullet::RandomPos()
