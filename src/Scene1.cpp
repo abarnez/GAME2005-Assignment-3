@@ -153,11 +153,6 @@ void Scene1::handleEvents()
 		TheGame::Instance()->changeSceneState(SCENE_2);
 	}
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
-	{
-		TheGame::Instance()->changeSceneState(END_SCENE);
-	}
-
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
 		m_pTank->move(-1);
 

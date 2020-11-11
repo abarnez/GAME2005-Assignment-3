@@ -35,6 +35,48 @@ void Scene2::update()
 
 	m_pPaddle->getTransform()->position.x = mouse_x;
 
+	float height = m_pBall->getHeight() / 2;
+	float width = m_pBall->getWidth() / 2;
+
+	if (m_pBall->getTransform()->position.y <= 0 + height)
+	{
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+	}
+	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
+	{
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+	}
+	else if (m_pBall->getTransform()->position.x <= 0 + width)
+	{
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
+	}
+	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
+	{
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
+	}
+	
+	float bottom = m_pPaddle->getTransform()->position.y + m_pPaddle->getHeight() / 2;
+	float top = m_pPaddle->getTransform()->position.y - m_pPaddle->getHeight() / 2;
+	float left = m_pPaddle->getTransform()->position.x - m_pPaddle->getWidth() / 2;
+	float right = m_pPaddle->getTransform()->position.x + m_pPaddle->getWidth() / 2;
+	if (m_pBall->getTransform()->position.y <= top + m_pBall->getHeight() / 2
+		&& m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
+	{
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+	}
+	/*else if (m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
+	{
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+	}
+	else if (m_pBall->getTransform()->position.x <= left + m_pBall->getWidth() / 2)
+	{
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
+	}
+	else if (m_pBall->getTransform()->position.x >= right - m_pBall->getWidth() / 2)
+	{
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
+	}*/
+
 	updateDisplayList();
 }
 
@@ -45,7 +87,6 @@ void Scene2::clean()
 
 void Scene2::handleEvents()
 {
-
 	EventManager::Instance().update();
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
@@ -62,11 +103,6 @@ void Scene2::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(SCENE_2);
 	}
-
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
-	{
-		TheGame::Instance()->changeSceneState(END_SCENE);
-	}
 }
 
 void Scene2::start()
@@ -77,6 +113,7 @@ void Scene2::start()
 	m_guiTitle = "Scene 2";
 	
 	SDL_ShowCursor(0);
+
 	//Paddle
 	m_pPaddle = new Paddle();
 	addChild(m_pPaddle);
@@ -86,6 +123,8 @@ void Scene2::start()
 	m_pBall = new Ball();
 	addChild(m_pBall);
 	m_pBall->getTransform()->position = glm::vec2(550, 50);
+	m_pBall->getRigidBody()->velocity.x = 200;
+	m_pBall->getRigidBody()->velocity.y = 200;
 }
 
 void Scene2::GUI_Function()

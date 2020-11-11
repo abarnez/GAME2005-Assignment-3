@@ -15,7 +15,6 @@ Ball::Ball()
 
 	getTransform()->position = glm::vec2(400.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-	getRigidBody()->acceleration = glm::vec2(10.0f, 10.0f);
 	getRigidBody()->isColliding = false;
 	setType(BALL);
 
