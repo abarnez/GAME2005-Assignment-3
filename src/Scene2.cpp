@@ -59,12 +59,12 @@ void Scene2::update()
 	float top = m_pPaddle->getTransform()->position.y - m_pPaddle->getHeight() / 2;
 	float left = m_pPaddle->getTransform()->position.x - m_pPaddle->getWidth() / 2;
 	float right = m_pPaddle->getTransform()->position.x + m_pPaddle->getWidth() / 2;
-	if (m_pBall->getTransform()->position.y <= top + m_pBall->getHeight() / 2
+	/*if (m_pBall->getTransform()->position.y <= top + m_pBall->getHeight() / 2
 		&& m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
 	{
 		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
 	}
-	/*else if (m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
+	else if (m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
 	{
 		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
 	}
@@ -122,7 +122,7 @@ void Scene2::start()
 	//Ball
 	m_pBall = new Ball();
 	addChild(m_pBall);
-	m_pBall->getTransform()->position = glm::vec2(550, 50);
+	m_pBall->getTransform()->position = glm::vec2(550, 100);
 	m_pBall->getRigidBody()->velocity.x = 200;
 	m_pBall->getRigidBody()->velocity.y = 200;
 }
