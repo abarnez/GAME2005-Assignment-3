@@ -32,98 +32,91 @@ void Scene1::draw()
 void Scene1::update()
 {
 	updateDisplayList();
-	// Create bullets at different time frame
-	if (createBullets)
+	if (showBullets)
 	{
-		currentTime = SDL_GetTicks();
-		if (currentTime > lastTime + 1000 * bulletSpawnTime)
-		{
-			lastTime = currentTime;
-			m_pBullet[bulletCount]->getTransform()->position = glm::vec2(0, 50);
-			m_pBullet[bulletCount]->RandomPos();
-			bulletCount++;
-		}
-		if (bulletCount == maxBullets)
-		{
-			createBullets = false;
-		}
-	}
+		float tx = m_pTank->getTransform()->position.x, ty = m_pTank->getTransform()->position.y;
+		float tw = m_pTank->getWidth();
+		glm::vec2 pos[4];
+		pos[0] = glm::vec2(tx - tw / 2, ty);
+		pos[1] = glm::vec2(tx + tw / 2, ty);
+		pos[2] = glm::vec2(tx - tw / 4, ty - 10);
+		pos[3] = glm::vec2(tx + tw / 5, ty - 10);
 
-	// Check collision of bullet to tank
-	// Change to sphere collision - swept spheres
-	float tx = m_pTank->getTransform()->position.x, ty = m_pTank->getTransform()->position.y;
-	float tw = m_pTank->getWidth();
-	glm::vec2 pos[4];
-	pos[0] = glm::vec2(tx - tw / 2, ty);
-	pos[1] = glm::vec2(tx + tw / 2, ty);
-	pos[2] = glm::vec2(tx - tw / 4, ty - 10);
-	pos[3] = glm::vec2(tx + tw / 5, ty - 10);
-	/*
-	* Top: 0 - 1
-	* Bottom: 2 - 3
-	* Left: 0 - 2
-	* Right: 1 - 3
-	* Top-Top: 4 - 5
-	* Top-left: 4 - 6
-	* Top-right: 5 - 7
-	* */
-
-	float deltaTime = 1.0f / Config::FPS;
-
-	for (int i = 0; i < maxBullets; i++)
-	{
-		float bw = m_pBullet[i]->getWidth();
-		float bh = m_pBullet[i]->getHeight();
-		//float lastX = m_pBullet[i]->lastX, lastY = m_pBullet[i]->lastY;
-		float curX = m_pBullet[i]->getTransform()->position.x, curY = m_pBullet[i]->getTransform()->position.y;
-		glm::vec2 nextPos = m_pBullet[i]->getTransform()->position + m_pBullet[i]->getRigidBody()->velocity * deltaTime * m_pBullet[i]->pixelsPerMeter;
-		float nextX = nextPos.x;
-		float nextY = nextPos.y;
-
-		glm::vec2 bpos[4];
-		// Bottom-Left
-		bpos[0] = glm::vec2(nextX - bw / 4, nextY + bh / 2);
-		// Bottom-Right
-		bpos[1] = glm::vec2(nextX + bw / 3, nextY + bh / 2);
-
-		// Bottom-Left current
-		bpos[2] = glm::vec2(curX - bw / 4, curY + bh / 2);
-		// Bottom-Right current
-		bpos[3] = glm::vec2(curX + bw / 3, curY + bh / 2); 
-
-		if (CollisionManager::doesCollide(pos[2], pos[3], bpos[2], bpos[3]))
+		// Create bullets at different time frame
+		float deltaTime = 1.0f / Config::FPS;
+		if (SDL_GetTicks() - bulletSpawnStart >= bulletSpawnTime * 1000)
 		{
-			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
-			std::cout << "cur pos HIT top tank collider " << "curY: " << bpos[2].y << "nextY: " << nextY << "\n";
-			SoundManager::Instance().playSound("Explode");
-			m_pBullet[i]->RandomPos();
-		}
-		else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[2], bpos[3]))
-		{
-			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
-			std::cout << "cur pos HIT bottom tank collider " << "curY: " << bpos[0].y << "nextY: " << nextY << "\n";
-			SoundManager::Instance().playSound("Explode");
-			m_pBullet[i]->RandomPos();
-		}
-		else if (CollisionManager::doesCollide(pos[2], pos[3], bpos[0], bpos[1]))
-		{
-			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
-			std::cout << "next pos HIT top tank collider " << "x: " << bpos[0].x << "\n";
-			SoundManager::Instance().playSound("Explode");
-			m_pBullet[i]->RandomPos();
-		}
-		else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[0], bpos[1]))
-		{
-			m_pBullet[i]->getTransform()->position.y = pos[0].y - m_pBullet[i]->getHeight() / 2;
-			std::cout << "next pos HIT bottom tank collider " << "x: " << bpos[0].x << "\n";
-			SoundManager::Instance().playSound("Explode");
-			m_pBullet[i]->RandomPos();
+			// Spawn bullet
+			if (m_pPool->active.size() < maxNumBullets)
+			{
+				SpawnBullet();
+			}
+			if (m_pPool->active.size() > maxNumBullets)
+			{
+				Bullet* bullet = (m_pPool->active.back());
+				m_pPool->inactive.push_back(bullet);
+				bullet->getTransform()->position.y = -50;
+				bullet->doesUpdate = false;
+				m_pPool->active.pop_back();
+			}
 		}
 
-		// Hit bottom of screen
-		if (curY >= Config::SCREEN_HEIGHT - m_pBullet[i]->getHeight() / 2)
+		std::vector<Bullet*> &activeBullets = m_pPool->active;
+		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
 		{
-			m_pBullet[i]->RandomPos();
+			Bullet* bullet = (*_It);
+			bullet->Gravity = Speed;
+			bullet->getRigidBody()->acceleration.y = Speed;
+			bullet->showWire = showWire;
+			float bw = bullet->getWidth();
+			float bh = bullet->getHeight();
+			float curX = bullet->getTransform()->position.x, curY = bullet->getTransform()->position.y;
+			glm::vec2 nextPos = bullet->getTransform()->position + bullet->getRigidBody()->velocity * deltaTime * bullet->pixelsPerMeter;
+			float nextX = nextPos.x;
+			float nextY = nextPos.y;
+
+			glm::vec2 bpos[4];
+
+			// Bottom-Left
+			bpos[0] = glm::vec2(nextX - bw / 4, nextY + bh / 2);
+			// Bottom-Right
+			bpos[1] = glm::vec2(nextX + bw / 3, nextY + bh / 2);
+
+			// Bottom-Left current
+			bpos[2] = glm::vec2(curX - bw / 4, curY + bh / 2);
+			// Bottom-Right current
+			bpos[3] = glm::vec2(curX + bw / 3, curY + bh / 2);
+
+			if (CollisionManager::doesCollide(pos[2], pos[3], bpos[2], bpos[3]))
+			{
+				bullet->getTransform()->position.y = pos[0].y - bullet->getHeight() / 2;
+				std::cout << "cur pos HIT top tank collider " << "curY: " << bpos[2].y << "nextY: " << nextY << "\n";
+				SoundManager::Instance().playSound("Explode");
+				bullet->RandomPos();
+			}
+			else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[2], bpos[3]))
+			{
+				bullet->getTransform()->position.y = pos[0].y - bullet->getHeight() / 2;
+				std::cout << "cur pos HIT bottom tank collider " << "curY: " << bpos[0].y << "nextY: " << nextY << "\n";
+				SoundManager::Instance().playSound("Explode");
+				bullet->RandomPos();
+			}
+			else if (CollisionManager::doesCollide(pos[2], pos[3], bpos[0], bpos[1]))
+			{
+				bullet->nextPosition = pos[2].y - bullet->getHeight() / 2;
+				std::cout << "next pos HIT top tank collider " << "x: " << bpos[0].x << "\n";
+			}
+			else if (CollisionManager::doesCollide(pos[0], pos[1], bpos[0], bpos[1]))
+			{
+				bullet->nextPosition = pos[0].y - bullet->getHeight() / 2;
+				std::cout << "next pos HIT bottom tank collider " << "x: " << bpos[0].x << "\n";
+			}
+
+			// Hit bottom of screen
+			if (curY >= Config::SCREEN_HEIGHT - bullet->getHeight() / 2)
+			{
+				bullet->RandomPos();
+			}
 		}
 	}
 }
@@ -170,37 +163,30 @@ void Scene1::start()
 
 	// Set GUI Title
 	m_guiTitle = "Scene 1";
+
+	showWire = false;
 	
 	// tanky tank stuff 
 	m_pTank = new Tank();
 	addChild(m_pTank);
 	m_pTank->getTransform()->position = glm::vec2(550, 750);
+	m_pTank->showWire = showWire;
 
 	Speed = 9.8f;
-	bulletCount = 0;
-	createBullets = false;
+	showBullets = false;
 	lastTime = 0;
 	bulletSpawnTime = 0.5f;
-	Mass = 1;
 
+	maxNumBullets = 10;
+	
+	m_pPool = new BulletPool(maxBullets);
 	for (int i = 0; i < maxBullets; i++)
 	{
-		m_pBullet[i] = new Bullet();
-		addChild(m_pBullet[i]);
-		m_pBullet[i]->getTransform()->position.y = -100;
-		m_pBullet[i]->getRigidBody()->mass = 1;
-		m_pBullet[i]->pixelsPerMeter = 1;
-		m_pBullet[i]->Gravity = Speed;
-		m_pBullet[i]->Mass = Mass;
-	}
-
-	/*m_pPool = new BulletPool(maxNumBullets);
-	for (int i = 0; i < 10; i++)
-	{
-		Bullet* bullet = m_pPool->Spawn();
+		Bullet* bullet = new Bullet();
+		m_pPool->inactive.push_back(bullet);
+		bullet->getTransform()->position.y = -50;
 		addChild(bullet);
-		bullet->RandomPos();
-	}*/
+	}
 
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
@@ -236,44 +222,52 @@ void Scene1::GUI_Function()
 	ImGui::Begin("Edit Variables", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 	if (ImGui::Button("Play"))
 	{
-		createBullets = true;
-		bulletCount = 0;
+		bulletSpawnStart = SDL_GetTicks();
+		showBullets = true;
+
+		std::vector<Bullet*>& activeBullets = m_pPool->active;
+		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
+		{
+			Bullet* bullet = (*_It);
+			bullet->doesUpdate = true;
+		}
 	}
 
 	if (ImGui::Button("Reset"))
 	{
-		createBullets = false;
-		for (int i = 0; i < maxBullets; i++)
+		showBullets = false; 
+		std::vector<Bullet*> &activeBullets = m_pPool->active;
+		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
 		{
-			m_pBullet[i]->doesUpdate = false;
-			m_pBullet[i]->getTransform()->position.y = -100;
+			Bullet* bullet = (*_It);
+			bullet->getTransform()->position.y = -50;
+			bullet->doesUpdate = false;
 		}
+		m_pPool->ResetAll();
 	}
 
 	if (ImGui::Button("Pause"))
 	{
-		for (int i = 0; i < maxBullets; i++)
+		showBullets = false; 
+		std::vector<Bullet*>& activeBullets = m_pPool->active;
+		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
 		{
-			m_pBullet[i]->doesUpdate = false;
+			Bullet* bullet = (*_It);
+			bullet->doesUpdate = false;
 		}
 	}
 
-	if (ImGui::SliderFloat("Bullet Spawn Time (s)", &bulletSpawnTime, 0.5f, 5))
-	{
+	ImGui::SliderFloat("Bullet Start Spawn Time (s)", &bulletSpawnTime, 0.5f, 5);
 
-	}
+	ImGui::SliderInt("Max bullets on screen", &maxNumBullets, 1, 100);
 
-	if (ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1, 1000))
-	{
-		// SET LABELS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	}
+	ImGui::SliderFloat("Speed of Tank", &m_pTank->ACCELERATION, 1, 1000);
 
-	if (ImGui::SliderFloat("Gravity", &Speed, 1, 5000))
+	ImGui::SliderFloat("Gravity", &Speed, 1, 5000);
+
+	if (ImGui::Checkbox("Show wire frame?", &showWire))
 	{
-		for (int i = 0; i < maxBullets; i++)
-		{
-			m_pBullet[i]->pixelsPerMeter = Speed;
-		}
+		m_pTank->showWire = showWire;
 	}
 
 	ImGui::Separator();
@@ -340,4 +334,18 @@ void Scene1::CreateLabels()
 	ThetaLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 150.0f));
 	ThetaLabel->setParent(this);
 	addChild(ThetaLabel);*/
+}
+
+void Scene1::SpawnBullet()
+{
+	Bullet* bullet = m_pPool->Spawn();
+	if (bullet)
+	{
+		bullet->pixelsPerMeter = 1;
+		bullet->Gravity = Speed;
+		bullet->RandomPos();
+		bullet->doesUpdate = true;
+	}
+
+	bulletSpawnStart = SDL_GetTicks();
 }

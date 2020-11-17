@@ -22,12 +22,11 @@ public:
 	float Gravity;
 	float pixelsPerMeter;
 	float Mass;
-	float lastX, lastY;
+	float nextPosition;
+	bool showWire;
 
 	glm::vec2 Force;
 	void RandomPos();
-
-	bool active;
 
 };
 

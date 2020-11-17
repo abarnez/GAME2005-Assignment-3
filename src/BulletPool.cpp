@@ -1,6 +1,5 @@
 #include "BulletPool.h"
 #include <iostream>
-#include <vector>
 
 BulletPool::BulletPool(unsigned int size)
 {
@@ -8,7 +7,6 @@ BulletPool::BulletPool(unsigned int size)
 	{
 		inactive.push_back(new Bullet());
 	}
-
 	std::cout << "Created pool w size of " << size << "\n";
 }
 
@@ -18,8 +16,13 @@ Bullet* BulletPool::Spawn()
 	if (inactive.size() > 0)
 	{
 		bullet = inactive.back();
-		bullet->active = true;
 		inactive.pop_back();
+		active.push_back(bullet);
+		std::cout << "Spawned bullet. \nActive: " << active.size() << "\n";
+	}
+	else
+	{
+		//std::cout << "Bullet unable to be spawned. \n";
 	}
 	return bullet;
 }
@@ -28,12 +31,22 @@ void BulletPool::Despawn(Bullet* bullet)
 {
 	inactive.push_back(bullet);
 
-	for (int i = 0; i < active.size(); i++)
+	for (std::vector<Bullet*>::iterator myIter = active.begin(); myIter != active.end(); myIter++)
 	{
-		if (active.at(i) == bullet)
+		if (*myIter == bullet)
 		{
-			active.erase(active.begin() + i);
+			active.erase(myIter);
+			std::cout << "Bullet despawned.\nActive: " << active.size() << "\n";
 			return;
 		}
 	}
+}
+
+void BulletPool::ResetAll()
+{
+	for (std::vector<Bullet*>::iterator myIter = active.begin(); myIter != active.end(); myIter++)
+	{
+		inactive.push_back(*myIter);
+	}
+	active.clear();
 }

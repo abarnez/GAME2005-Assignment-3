@@ -20,6 +20,7 @@ Tank::Tank()
 	setType(TANK);
 	ACCELERATION = 200;
 	m_direction = glm::vec2(0, 0);
+	showWire = true;
 }
 
 
@@ -35,32 +36,35 @@ void Tank::draw()
 	// draw the Tank
 	TextureManager::Instance()->draw("Tank", x, y, 0, 255, true);
 
-	glm::vec2 pos[10];
-	float w = getWidth(), h = getHeight();
-	pos[0] = glm::vec2(x - w / 2, y);
-	pos[1] = glm::vec2(x + w / 2, y);
-	pos[2] = glm::vec2(x - w / 2, y + h / 2);
-	pos[3] = glm::vec2(x + w / 2, y + h / 2);
-	// Top
-	Util::DrawLine(pos[0], pos[1], glm::vec4(0, 1, 0, 1));
-	// Bottom
-	Util::DrawLine(pos[2], pos[3], glm::vec4(0, 1, 0, 1));
-	// Left
-	Util::DrawLine(pos[0], pos[2], glm::vec4(0, 1, 0, 1));
-	// Right
-	Util::DrawLine(pos[1], pos[3], glm::vec4(0, 1, 0, 1));
+	if (showWire)
+	{
+		glm::vec2 pos[8];
+		float w = getWidth(), h = getHeight();
+		pos[0] = glm::vec2(x - w / 2, y);
+		pos[1] = glm::vec2(x + w / 2, y);
+		pos[2] = glm::vec2(x - w / 2, y + h / 2);
+		pos[3] = glm::vec2(x + w / 2, y + h / 2);
+		// Top
+		Util::DrawLine(pos[0], pos[1], glm::vec4(0, 1, 0, 1));
+		// Bottom
+		Util::DrawLine(pos[2], pos[3], glm::vec4(0, 1, 0, 1));
+		// Left
+		Util::DrawLine(pos[0], pos[2], glm::vec4(0, 1, 0, 1));
+		// Right
+		Util::DrawLine(pos[1], pos[3], glm::vec4(0, 1, 0, 1));
 
-	pos[4] = glm::vec2(x - w / 4, y - 10);
-	pos[5] = glm::vec2(x + w / 5, y - 10);
-	pos[6] = glm::vec2(x - w / 4, y);
-	pos[7] = glm::vec2(x + w / 5, y);
+		pos[4] = glm::vec2(x - w / 4, y - 10);
+		pos[5] = glm::vec2(x + w / 5, y - 10);
+		pos[6] = glm::vec2(x - w / 4, y);
+		pos[7] = glm::vec2(x + w / 5, y);
 
-	// Top
-	Util::DrawLine(pos[4], pos[5], glm::vec4(0, 1, 0, 1));
-	// Left
-	Util::DrawLine(pos[4], pos[6], glm::vec4(0, 1, 0, 1));
-	// Right
-	Util::DrawLine(pos[5], pos[7], glm::vec4(0, 1, 0, 1));
+		// Top
+		Util::DrawLine(pos[4], pos[5], glm::vec4(0, 1, 0, 1));
+		// Left
+		Util::DrawLine(pos[4], pos[6], glm::vec4(0, 1, 0, 1));
+		// Right
+		Util::DrawLine(pos[5], pos[7], glm::vec4(0, 1, 0, 1));
+	}
 }
 
 

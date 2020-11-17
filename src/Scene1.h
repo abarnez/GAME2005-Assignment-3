@@ -7,6 +7,8 @@
 #include "Tank.h"
 #include "BulletPool.h"
 
+#include <queue>
+
 class Scene1 : public Scene
 {
 public:
@@ -20,6 +22,8 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 
+	void SpawnBullet();
+
 private:
 	// IMGUI Function
 	void GUI_Function();
@@ -30,9 +34,8 @@ private:
 	BulletPool* m_pPool;
 
 	int maxNumBullets;
-	static const int maxBullets = 10;
+	static const int maxBullets = 100;
 	Tank* m_pTank;
-	Bullet* m_pBullet[maxBullets];
 	float Speed;
 
 	bool m_playerFacingRight;
@@ -43,11 +46,13 @@ private:
 	Label* m_pInstructionsLabel;
 
 	unsigned int lastTime, currentTime;
-	bool createBullets;
-	int bulletCount;
+	bool showBullets, showWire;
 	float bulletSpawnTime;
-	float Mass;
+
+	float bulletSpawnStart;
 	
+	// Bullet Pool
+	std::queue<Bullet*> m_pBulletPool;
 
 	// mass, position, velocity, acceleration, force
 	Label* MassLabel{};

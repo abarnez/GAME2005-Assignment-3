@@ -19,6 +19,7 @@ public:
 	float ACCELERATION;
 
 	float lastX, lastY;
+	bool showWire;
 
 private:
 	glm::vec2 m_direction;
