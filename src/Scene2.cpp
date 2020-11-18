@@ -36,9 +36,9 @@ void Scene2::update()
 	float paddle_y = m_pPaddle->getTransform()->position.y;
 	float paddle_width = m_pPaddle->getWidth();
 	glm::vec2 topLeft;
-	topLeft = glm::vec2(paddle_x - paddle_width / 2 , paddle_y);
+	topLeft = glm::vec2(paddle_x - paddle_width / 2 , paddle_y - 20);
 	glm::vec2 topRight;
-	topRight = glm::vec2(paddle_x + paddle_width / 2 , paddle_y);
+	topRight = glm::vec2(paddle_x + paddle_width / 2 , paddle_y - 20);
 	
 	//ball bottom left bottom right
 	float ball_x = m_pBall->getTransform()->position.x;
@@ -46,10 +46,10 @@ void Scene2::update()
 	float ball_width = m_pBall->getWidth();
 	float ball_height = m_pBall->getHeight();
 	glm::vec2 bottomLeft;
-	bottomLeft = glm::vec2(ball_x - ball_width, ball_y + ball_height / 1.5);
+	bottomLeft = glm::vec2(ball_x - ball_width, ball_y + ball_height / 2);
 	glm::vec2 bottomRight;
-	bottomRight = glm::vec2(ball_x + ball_width, ball_y + ball_height / 1.5);
-	std::cout << bottomLeft.x;
+	bottomRight = glm::vec2(ball_x + ball_width, ball_y + ball_height / 2);
+
 	//collision check
 	if (CollisionManager::doesCollide(topLeft, topRight, bottomLeft, bottomRight)) {
 	
