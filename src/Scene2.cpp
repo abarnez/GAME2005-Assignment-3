@@ -31,8 +31,27 @@ void Scene2::draw()
 
 void Scene2::update()
 {
-	SDL_GetMouseState(&mouse_x, &mouse_y);
+	//paddle top left top right	
+	float paddle_x = m_pPaddle->getTransform()->position.x;
+	float paddle_y = m_pPaddle->getTransform()->position.y;
+	float paddle_width = m_pPaddle->getWidth();
+	glm::vec2 topLeft;
+	topLeft = glm::vec2(paddle_x - paddle_width , m_pPaddle->getTransform()->position.y);
+	glm::vec2 topRight;
+	topRight = glm::vec2(paddle_x + paddle_width, m_pPaddle->getTransform()->position.y);
+	
+	//ball bottom left bottom right
+	float ball_x = m_pBall->getTransform()->position.x;
+	float ball_y = m_pBall->getTransform()->position.y;
+	float ball_width = m_pBall->getWidth();
+	float ball_height = m_pBall->getHeight();
+	glm::vec2 bottomLeft;
+	topLeft = glm::vec2(ball_x - ball_width, m_pPaddle->getTransform()->position.y);
+	glm::vec2 bottomRight;
+	topRight = glm::vec2(ball_x + ball_width, m_pPaddle->getTransform()->position.y);
 
+	//paddle follow mouse pos
+	SDL_GetMouseState(&mouse_x, &mouse_y);
 	m_pPaddle->getTransform()->position.x = mouse_x;
 
 	float height = m_pBall->getHeight() / 2;
@@ -59,6 +78,7 @@ void Scene2::update()
 	float top = m_pPaddle->getTransform()->position.y - m_pPaddle->getHeight() / 2;
 	float left = m_pPaddle->getTransform()->position.x - m_pPaddle->getWidth() / 2;
 	float right = m_pPaddle->getTransform()->position.x + m_pPaddle->getWidth() / 2;
+
 	/*if (m_pBall->getTransform()->position.y <= top + m_pBall->getHeight() / 2
 		&& m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
 	{
@@ -123,7 +143,7 @@ void Scene2::start()
 	m_pBall = new Ball();
 	addChild(m_pBall);
 	m_pBall->getTransform()->position = glm::vec2(550, 100);
-	m_pBall->getRigidBody()->velocity.x = 200;
+	m_pBall->getRigidBody()->velocity.x = 100;
 	m_pBall->getRigidBody()->velocity.y = 200;
 }
 
