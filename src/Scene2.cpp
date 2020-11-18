@@ -36,9 +36,9 @@ void Scene2::update()
 	float paddle_y = m_pPaddle->getTransform()->position.y;
 	float paddle_width = m_pPaddle->getWidth();
 	glm::vec2 topLeft;
-	topLeft = glm::vec2(paddle_x - paddle_width , m_pPaddle->getTransform()->position.y);
+	topLeft = glm::vec2(paddle_x - paddle_width / 2 , paddle_y);
 	glm::vec2 topRight;
-	topRight = glm::vec2(paddle_x + paddle_width, m_pPaddle->getTransform()->position.y);
+	topRight = glm::vec2(paddle_x + paddle_width / 2 , paddle_y);
 	
 	//ball bottom left bottom right
 	float ball_x = m_pBall->getTransform()->position.x;
@@ -46,9 +46,15 @@ void Scene2::update()
 	float ball_width = m_pBall->getWidth();
 	float ball_height = m_pBall->getHeight();
 	glm::vec2 bottomLeft;
-	topLeft = glm::vec2(ball_x - ball_width, m_pPaddle->getTransform()->position.y);
+	bottomLeft = glm::vec2(ball_x - ball_width, ball_y + ball_height / 1.5);
 	glm::vec2 bottomRight;
-	topRight = glm::vec2(ball_x + ball_width, m_pPaddle->getTransform()->position.y);
+	bottomRight = glm::vec2(ball_x + ball_width, ball_y + ball_height / 1.5);
+	std::cout << bottomLeft.x;
+	//collision check
+	if (CollisionManager::doesCollide(topLeft, topRight, bottomLeft, bottomRight)) {
+	
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+	}
 
 	//paddle follow mouse pos
 	SDL_GetMouseState(&mouse_x, &mouse_y);
