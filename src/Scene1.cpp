@@ -123,6 +123,7 @@ void Scene1::update()
 
 void Scene1::clean()
 {
+	ResetScene();
 	removeAllChildren();
 }
 
@@ -235,15 +236,7 @@ void Scene1::GUI_Function()
 
 	if (ImGui::Button("Reset"))
 	{
-		showBullets = false; 
-		std::vector<Bullet*> &activeBullets = m_pPool->active;
-		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
-		{
-			Bullet* bullet = (*_It);
-			bullet->getTransform()->position.y = -50;
-			bullet->doesUpdate = false;
-		}
-		m_pPool->ResetAll();
+		ResetScene();
 	}
 
 	if (ImGui::Button("Pause"))
@@ -348,4 +341,17 @@ void Scene1::SpawnBullet()
 	}
 
 	bulletSpawnStart = SDL_GetTicks();
+}
+
+void Scene1::ResetScene()
+{
+	showBullets = false;
+	std::vector<Bullet*>& activeBullets = m_pPool->active;
+	for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
+	{
+		Bullet* bullet = (*_It);
+		bullet->getTransform()->position.y = -50;
+		bullet->doesUpdate = false;
+	}
+	m_pPool->ResetAll();
 }

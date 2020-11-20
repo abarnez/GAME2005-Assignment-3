@@ -23,6 +23,7 @@ public:
 	virtual void start() override;
 
 	void SpawnBullet();
+	void ResetScene();
 
 private:
 	// IMGUI Function

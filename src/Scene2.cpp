@@ -108,6 +108,7 @@ void Scene2::update()
 
 void Scene2::clean()
 {
+	SDL_ShowCursor(1);
 	removeAllChildren();
 }
 
