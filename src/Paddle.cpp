@@ -53,6 +53,8 @@ void Paddle::update()
 		getTransform()->position.x = Config::SCREEN_WIDTH - getWidth() / 2;
 		freeze();
 	}
+
+	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 }
 
 void Paddle::clean()

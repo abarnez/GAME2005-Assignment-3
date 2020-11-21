@@ -54,6 +54,7 @@ void Scene2::update()
 	if (CollisionManager::doesCollide(topLeft, topRight, bottomLeft, bottomRight)) {
 	
 		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+		std::cout << "Paddle Veloctiy on x:" << m_pPaddle->getRigidBody()->acceleration.x << "\n";
 	}
 
 	//paddle follow mouse pos
@@ -66,21 +67,25 @@ void Scene2::update()
 	if (m_pBall->getTransform()->position.y <= 0 + height)
 	{
 		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 0.98f;
+		//m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 1.1f; //speed mode
 		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
 	{
 		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 0.98f;
+		//m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 1.1f; //speed mode
 		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x <= 0 + width)
 	{
 		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 0.98f;	
+		//m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 1.1f; //speed mode
 		std::cout << "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
 	{
 		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 0.98f;
+		//m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 1.1f;  //speed mode
 		std::cout <<  "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	
