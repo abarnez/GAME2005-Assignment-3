@@ -65,19 +65,23 @@ void Scene2::update()
 
 	if (m_pBall->getTransform()->position.y <= 0 + height)
 	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 0.98f;
+		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
 	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 0.98f;
+		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x <= 0 + width)
 	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 0.98f;	
+		std::cout << "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
 	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 0.98f;
+		std::cout <<  "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	
 	float bottom = m_pPaddle->getTransform()->position.y + m_pPaddle->getHeight() / 2;
