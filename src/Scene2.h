@@ -30,6 +30,9 @@ private:
 	//LootCrate* m_pLootCrate;
 	bool m_playerFacingRight;
 
+	float coeffecient;
+	bool Cube;
+
 	// UI Items
 	Button* m_pBackButton;
 	Button* m_pNextButton;

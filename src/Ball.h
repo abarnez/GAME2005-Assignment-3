@@ -17,6 +17,8 @@ public:
 	void addForce(glm::vec2 Amount);
 	void move();
 
+	bool cube = false;
+
 	bool doesUpdate = false;
 
 	float Gravity;

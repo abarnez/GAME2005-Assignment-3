@@ -10,6 +10,11 @@ Ball::Ball()
 	TextureManager::Instance()->load("../Assets/textures/ball.png", "Ball");
 
 	auto size = TextureManager::Instance()->getTextureSize("Ball");
+
+	TextureManager::Instance()->load("../Assets/textures/cube.png", "Cube");
+
+	//auto size = TextureManager::Instance()->getTextureSize("Cube");
+
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -32,8 +37,14 @@ void Ball::draw()
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	// draw the Bullet
-	TextureManager::Instance()->draw("Ball", x, y, 0, 255, true);
+	// draw the Ball
+	if(cube)
+	{
+		TextureManager::Instance()->draw("Cube", x, y, 0, 255, true);
+	}
+	else {
+		TextureManager::Instance()->draw("Ball", x, y, 0, 255, true);
+	}
 }
 
 

@@ -66,25 +66,29 @@ void Scene2::update()
 
 	if (m_pBall->getTransform()->position.y <= 0 + height)
 	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 0.98f;
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * coeffecient;
+
 		//m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 1.1f; //speed mode
 		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
 	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 0.98f;
+		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * coeffecient;
+	
 		//m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 1.1f; //speed mode
 		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x <= 0 + width)
 	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 0.98f;	
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * coeffecient;
+		
 		//m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 1.1f; //speed mode
 		std::cout << "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
 	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 0.98f;
+		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * coeffecient;
+		
 		//m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 1.1f;  //speed mode
 		std::cout <<  "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
@@ -115,6 +119,8 @@ void Scene2::update()
 	updateDisplayList();
 }
 
+
+
 void Scene2::clean()
 {
 	SDL_ShowCursor(1);
@@ -144,6 +150,8 @@ void Scene2::handleEvents()
 void Scene2::start()
 {
 	TextureManager::Instance()->load("../Assets/textures/scene_2_bg.jpg", "background");
+	coeffecient = 1.0f;
+	
 
 	// Set GUI Title
 	m_guiTitle = "Scene 2";
@@ -161,6 +169,7 @@ void Scene2::start()
 	m_pBall->getTransform()->position = glm::vec2(550, 100);
 	m_pBall->getRigidBody()->velocity.x = 100;
 	m_pBall->getRigidBody()->velocity.y = 200;
+	
 }
 
 void Scene2::GUI_Function()
@@ -169,11 +178,14 @@ void Scene2::GUI_Function()
 	
 	ImGui::Begin("Edit Variables", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	/*if (ImGui::Button("Play"))
+	if (ImGui::Checkbox("Cube: ", &Cube))
 	{
-		m_pLootCrate->doesUpdate = true;
+		m_pBall->cube = Cube;
+		m_pBall->getTransform()->position = glm::vec2(550, 100);
+		m_pBall->getRigidBody()->velocity.x = 100;
+		m_pBall->getRigidBody()->velocity.y = 200;
 	}
-
+	/*
 	if (ImGui::Button("Reset"))
 	{
 		m_pLootCrate->doesUpdate = false;
@@ -182,13 +194,16 @@ void Scene2::GUI_Function()
 		m_pLootCrate->getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 		SetText();
 	}*/
-
+	ImGui::SliderFloat("Ball Slow Down Y", &coeffecient, 0.97f, 1);
 	ImGui::Separator();
 
 	ImGui::End();
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+
+	
+	
 }
 
 void Scene2::SetText()
