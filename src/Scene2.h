@@ -30,6 +30,7 @@ private:
 	//LootCrate* m_pLootCrate;
 	bool m_playerFacingRight;
 
+	float bVelocity;
 	float coeffecient;
 	bool Cube;
 

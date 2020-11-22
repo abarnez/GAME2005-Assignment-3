@@ -31,6 +31,7 @@ void Scene2::draw()
 
 void Scene2::update()
 {
+	bVelocity = m_pBall->getRigidBody()->velocity.x;
 	//paddle top left top right	
 	float paddle_x = m_pPaddle->getTransform()->position.x;
 	float paddle_y = m_pPaddle->getTransform()->position.y;
@@ -116,6 +117,9 @@ void Scene2::update()
 		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
 	}*/
 
+	//lables
+	SetText();
+
 	updateDisplayList();
 }
 
@@ -167,8 +171,19 @@ void Scene2::start()
 	m_pBall = new Ball();
 	addChild(m_pBall);
 	m_pBall->getTransform()->position = glm::vec2(550, 100);
-	m_pBall->getRigidBody()->velocity.x = 100;
-	m_pBall->getRigidBody()->velocity.y = 200;
+
+
+	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
+	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
+	addChild(m_pInstructionsLabel);
+
+	VelocityLabel = new Label;
+	VelocityLabel->getTransform()->position = glm::vec2(200.0f, 700.0f);
+	addChild(VelocityLabel);
+
+	PositionLabel = new Label;
+	PositionLabel->getTransform()->position = glm::vec2(210.0f, 685.0f);
+	addChild(PositionLabel);
 	
 }
 
@@ -176,25 +191,33 @@ void Scene2::GUI_Function()
 {
 	ImGui::NewFrame();
 	
-	ImGui::Begin("Edit Variables", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Game Menu", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+
+
+	if (ImGui::Button("Play"))
+	{
+		m_pBall->getRigidBody()->velocity.x = 100;
+		m_pBall->getRigidBody()->velocity.y = 200;
+	}
+
+	if (ImGui::Button("Reset"))
+	{
+		m_pBall->getRigidBody()->velocity.x = 0;
+		m_pBall->getRigidBody()->velocity.y = 0;
+		m_pBall->getTransform()->position = glm::vec2(550, 100);
+	}
 
 	if (ImGui::Checkbox("Cube: ", &Cube))
 	{
 		m_pBall->cube = Cube;
 		m_pBall->getTransform()->position = glm::vec2(550, 100);
-		m_pBall->getRigidBody()->velocity.x = 100;
-		m_pBall->getRigidBody()->velocity.y = 200;
+		m_pBall->getRigidBody()->velocity.x = 0;
+		m_pBall->getRigidBody()->velocity.y = 0;
+	
 	}
-	/*
-	if (ImGui::Button("Reset"))
-	{
-		m_pLootCrate->doesUpdate = false;
-		SetTriangle();
-		m_pLootCrate->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		m_pLootCrate->getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-		SetText();
-	}*/
-	ImGui::SliderFloat("Ball Slow Down Y", &coeffecient, 0.97f, 1);
+
+
+	ImGui::SliderFloat("Ball Slow Down", &coeffecient, 0.97f, 1);
 	ImGui::Separator();
 
 	ImGui::End();
@@ -208,6 +231,13 @@ void Scene2::GUI_Function()
 
 void Scene2::SetText()
 {
+	std::string Text = "";
+	Text = "Velocity (x, y): (" + std::to_string(m_pBall->getRigidBody()->velocity.x) + ", " + std::to_string(m_pBall->getRigidBody()->velocity.y) + ")";
+	VelocityLabel->setText(Text);
+
+	Text = "Position (x, y): (" + std::to_string(m_pBall->getTransform()->position.x) + ", " + std::to_string(m_pBall ->getTransform()->position.y) + ")";
+	PositionLabel->setText(Text);
+
 /*	std::string Text = "";
 	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
 	MassLabel->setText(Text);
