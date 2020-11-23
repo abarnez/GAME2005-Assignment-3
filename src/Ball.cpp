@@ -26,6 +26,8 @@ Ball::Ball()
 	pixelsPerMeter = 1;
 	Gravity = 9.8f;
 	Mass = 1;
+	doesUpdate = false;
+	objectName = "Ball";
 }
 
 Ball::~Ball()
@@ -38,13 +40,20 @@ void Ball::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the Ball
-	if(cube)
+	TextureManager::Instance()->draw(objectName, x, y, 0, 255, true);
+
+	float width = getWidth(), height = getHeight();
+	glm::vec2 bottomLeft;
+	bottomLeft = glm::vec2(x - width, y + height / 2);
+	glm::vec2 bottomRight;
+	bottomRight = glm::vec2(x + width, y + height / 2);
+	/*if(cube)
 	{
 		TextureManager::Instance()->draw("Cube", x, y, 0, 255, true);
 	}
 	else {
 		TextureManager::Instance()->draw("Ball", x, y, 0, 255, true);
-	}
+	}*/
 }
 
 

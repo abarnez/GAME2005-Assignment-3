@@ -26,12 +26,22 @@ void Scene2::draw()
 	if (EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
+		SDL_ShowCursor(1);
+	}
+	else
+	{
+		SDL_ShowCursor(0);
+		SDL_GetMouseState(&mouse_x, &mouse_y);
+		m_pPaddle->getTransform()->position.x = mouse_x;
+		//float direction = mouse_x - m_pPaddle->getTransform()->position.x;
+
 	}
 }
 
 void Scene2::update()
 {
 	bVelocity = m_pBall->getRigidBody()->velocity.x;
+
 	//paddle top left top right	
 	float paddle_x = m_pPaddle->getTransform()->position.x;
 	float paddle_y = m_pPaddle->getTransform()->position.y;
@@ -51,79 +61,49 @@ void Scene2::update()
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(ball_x + ball_width, ball_y + ball_height / 2);
 
-	//collision check
-	if (CollisionManager::doesCollide(topLeft, topRight, bottomLeft, bottomRight)) {
-	
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
-		std::cout << "Paddle Veloctiy on x:" << m_pPaddle->getRigidBody()->acceleration.x << "\n";
-	}
-
-	//paddle follow mouse pos
-	SDL_GetMouseState(&mouse_x, &mouse_y);
-	m_pPaddle->getTransform()->position.x = mouse_x;
-
 	float height = m_pBall->getHeight() / 2;
 	float width = m_pBall->getWidth() / 2;
 
-	if (m_pBall->getTransform()->position.y <= 0 + height)
+	//Collision check
+	if (CollisionManager::doesCollide(topLeft, topRight, bottomLeft, bottomRight))
 	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * coeffecient;
+		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
+		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
+		std::cout << "Paddle Velocity on x:" << m_pPaddle->getRigidBody()->acceleration.x << "\n";
+	}
+	else if (m_pBall->getTransform()->position.y <= 0 + height)
+	{
+		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
+		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
 
-		//m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 1.1f; //speed mode
-		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
+		std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
 	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * coeffecient;
-	
-		//m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y * 1.1f; //speed mode
-		std::cout << "Veloctiy on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
+		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
+		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
+
+		std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x <= 0 + width)
 	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * coeffecient;
-		
-		//m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 1.1f; //speed mode
-		std::cout << "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x;
+		m_pBall->getRigidBody()->velocity.x = -reduceVelocityByCoefficient;
+
+		std::cout << "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
 	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * coeffecient;
-		
-		//m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x * 1.1f;  //speed mode
-		std::cout <<  "Veloctiy on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x;
+		m_pBall->getRigidBody()->velocity.x = -reduceVelocityByCoefficient;
+
+		std::cout <<  "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
 	}
 	
 	float bottom = m_pPaddle->getTransform()->position.y + m_pPaddle->getHeight() / 2;
 	float top = m_pPaddle->getTransform()->position.y - m_pPaddle->getHeight() / 2;
 	float left = m_pPaddle->getTransform()->position.x - m_pPaddle->getWidth() / 2;
 	float right = m_pPaddle->getTransform()->position.x + m_pPaddle->getWidth() / 2;
-
-	if(showMouse)
-	{
-		SDL_ShowCursor(1);
-	}
-	else {
-		SDL_ShowCursor(0);
-	}
-
-	/*if (m_pBall->getTransform()->position.y <= top + m_pBall->getHeight() / 2
-		&& m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
-	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
-	}
-	else if (m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
-	{
-		m_pBall->getRigidBody()->velocity.y = -m_pBall->getRigidBody()->velocity.y;
-	}
-	else if (m_pBall->getTransform()->position.x <= left + m_pBall->getWidth() / 2)
-	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
-	}
-	else if (m_pBall->getTransform()->position.x >= right - m_pBall->getWidth() / 2)
-	{
-		m_pBall->getRigidBody()->velocity.x = -m_pBall->getRigidBody()->velocity.x;
-	}*/
 
 	//lables
 	SetText();
@@ -163,14 +143,14 @@ void Scene2::handleEvents()
 void Scene2::start()
 {
 	TextureManager::Instance()->load("../Assets/textures/scene_2_bg.jpg", "background");
-	coeffecient = 1.0f;
-	
 
 	// Set GUI Title
 	m_guiTitle = "Scene 2";
 	
-	showMouse = false;
 	SDL_ShowCursor(0);
+
+	isCube = false;
+	momentumCoefficient = 0;
 
 	//Paddle
 	m_pPaddle = new Paddle();
@@ -182,18 +162,7 @@ void Scene2::start()
 	addChild(m_pBall);
 	m_pBall->getTransform()->position = glm::vec2(550, 100);
 
-
-	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
-	addChild(m_pInstructionsLabel);
-
-	VelocityLabel = new Label;
-	VelocityLabel->getTransform()->position = glm::vec2(215.0f, 700.0f);
-	addChild(VelocityLabel);
-
-	PositionLabel = new Label;
-	PositionLabel->getTransform()->position = glm::vec2(210.0f, 685.0f);
-	addChild(PositionLabel);
+	CreateLabels();
 	
 }
 
@@ -202,7 +171,6 @@ void Scene2::GUI_Function()
 	ImGui::NewFrame();
 	
 	ImGui::Begin("Game Menu", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
-
 
 	if (ImGui::Button("Play"))
 	{
@@ -216,29 +184,23 @@ void Scene2::GUI_Function()
 		m_pBall->getRigidBody()->velocity.y = 0;
 		m_pBall->getTransform()->position = glm::vec2(550, 100);
 	}
-	if (ImGui::Checkbox("Show Mouse: ",&showMouse )){
-		
-	}
-
-	if (ImGui::Checkbox("Cube: ", &Cube))
+	
+	if (ImGui::Checkbox("Make cube?", &isCube))
 	{
-		m_pBall->cube = Cube;
+		m_pBall->objectName = isCube ? "Cube" : "Ball";
 		m_pBall->getTransform()->position = glm::vec2(550, 100);
 		m_pBall->getRigidBody()->velocity.x = 0;
 		m_pBall->getRigidBody()->velocity.y = 0;
-	
 	}
 
 
-	ImGui::SliderFloat("Ball Slow Down", &coeffecient, 0.97f, 1);
+	ImGui::SliderFloat("Momentum Decrease by (%)", &momentumCoefficient, 0, 1);
 	ImGui::Separator();
 
 	ImGui::End();
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
-
-	
 	
 }
 
@@ -250,59 +212,19 @@ void Scene2::SetText()
 
 	Text = "Position (x, y): (" + std::to_string(m_pBall->getTransform()->position.x) + ", " + std::to_string(m_pBall ->getTransform()->position.y) + ")";
 	PositionLabel->setText(Text);
-
-/*	std::string Text = "";
-	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
-	MassLabel->setText(Text);
-
-	Text = "Position (x, y): (" + std::to_string(m_pLootCrate->getTransform()->position.x) + ", " + std::to_string(m_pLootCrate->getTransform()->position.y) + ")";
-	PositionLabel->setText(Text);
-
-	Text = "Velocity (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->velocity.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->velocity.y) + ")";
-	VelocityLabel->setText(Text);
-
-	Text = "Acceleration (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->acceleration.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->acceleration.y) + ")";
-	AccelerationLabel->setText(Text);
-
-	Text = "Force: " + std::to_string(m_pLootCrate->Mass * m_pLootCrate->getRigidBody()->acceleration.x) + " N";
-	ForceLabel->setText(Text);
-
-	Text = "Theta: " + std::to_string(glm::degrees(Theta));
-	ThetaLabel->setText(Text);*/
 }
 
 void Scene2::CreateLabels()
 {
-/*	const SDL_Color green = { 0, 255, 0, 255 };
+	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
+	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
+	addChild(m_pInstructionsLabel);
 
-	std::string Text = "";
-	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
-	MassLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 25.0f));
-	MassLabel->setParent(this);
-	addChild(MassLabel);
-
-	Text = "Position (x, y): (" + std::to_string(m_pLootCrate->getTransform()->position.x) + ", " + std::to_string(m_pLootCrate->getTransform()->position.y) + ")";
-	PositionLabel = new Label(Text, "Consolas", 15, green, glm::vec2(175.0f, 100.0f));
-	PositionLabel->setParent(this);
-	addChild(PositionLabel);
-
-	Text = "Velocity (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->velocity.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->velocity.y) + ")";
-	VelocityLabel = new Label(Text, "Consolas", 15, green, glm::vec2(175.0f, 50.0f));
-	VelocityLabel->setParent(this);
+	VelocityLabel = new Label;
+	VelocityLabel->getTransform()->position = glm::vec2(215.0f, 700.0f);
 	addChild(VelocityLabel);
 
-	Text = "Acceleration (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->acceleration.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->acceleration.y) + ")";
-	AccelerationLabel = new Label(Text, "Consolas", 15, green, glm::vec2(175.0f, 75.0f));
-	AccelerationLabel->setParent(this);
-	addChild(AccelerationLabel);
-
-	Text = "Force: " + std::to_string(m_pLootCrate->Mass * m_pLootCrate->getRigidBody()->acceleration.x) + " N";
-	ForceLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 125.0f));
-	ForceLabel->setParent(this);
-	addChild(ForceLabel);
-
-	Text = "Theta: " + std::to_string(glm::degrees(Theta));
-	ThetaLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 150.0f));
-	ThetaLabel->setParent(this);
-	addChild(ThetaLabel);*/
+	PositionLabel = new Label;
+	PositionLabel->getTransform()->position = glm::vec2(210.0f, 685.0f);
+	addChild(PositionLabel);
 }

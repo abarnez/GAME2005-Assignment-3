@@ -19,7 +19,9 @@ public:
 
 	bool cube = false;
 
-	bool doesUpdate = false;
+	char* objectName;
+
+	bool doesUpdate;
 
 	float Gravity;
 	float pixelsPerMeter;

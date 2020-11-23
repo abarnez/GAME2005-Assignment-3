@@ -61,8 +61,7 @@ void Scene1::update()
 			}
 		}
 
-		std::vector<Bullet*> &activeBullets = m_pPool->active;
-		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
+		for (std::vector<Bullet*>::iterator _It = m_pPool->active.begin(); _It != m_pPool->active.end(); _It++)
 		{
 			Bullet* bullet = (*_It);
 			bullet->Gravity = Speed;
@@ -177,7 +176,6 @@ void Scene1::start()
 	showBullets = false;
 	lastTime = 0;
 	bulletSpawnTime = 0.5f;
-
 	maxNumBullets = 10;
 	
 	m_pPool = new BulletPool(maxBullets);
@@ -226,8 +224,7 @@ void Scene1::GUI_Function()
 		bulletSpawnStart = SDL_GetTicks();
 		showBullets = true;
 
-		std::vector<Bullet*>& activeBullets = m_pPool->active;
-		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
+		for (std::vector<Bullet*>::iterator _It = m_pPool->active.begin(); _It != m_pPool->active.end(); _It++)
 		{
 			Bullet* bullet = (*_It);
 			bullet->doesUpdate = true;
@@ -242,8 +239,7 @@ void Scene1::GUI_Function()
 	if (ImGui::Button("Pause"))
 	{
 		showBullets = false; 
-		std::vector<Bullet*>& activeBullets = m_pPool->active;
-		for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
+		for (std::vector<Bullet*>::iterator _It = m_pPool->active.begin(); _It != m_pPool->active.end(); _It++)
 		{
 			Bullet* bullet = (*_It);
 			bullet->doesUpdate = false;
@@ -346,8 +342,7 @@ void Scene1::SpawnBullet()
 void Scene1::ResetScene()
 {
 	showBullets = false;
-	std::vector<Bullet*>& activeBullets = m_pPool->active;
-	for (std::vector<Bullet*>::iterator _It = activeBullets.begin(); _It != activeBullets.end(); _It++)
+	for (std::vector<Bullet*>::iterator _It = m_pPool->active.begin(); _It != m_pPool->active.end(); _It++)
 	{
 		Bullet* bullet = (*_It);
 		bullet->getTransform()->position.y = -50;

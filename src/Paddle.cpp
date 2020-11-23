@@ -35,6 +35,14 @@ void Paddle::draw()
 
 	// draw the Paddle
 	TextureManager::Instance()->draw("Paddle", x, y, 0, 255, true);
+
+	float width = getWidth(), height = getHeight();
+	glm::vec2 topLeft;
+	topLeft = glm::vec2(x - width / 4, y - 20);
+	glm::vec2 topRight;
+	topRight = glm::vec2(x + width / 4, y - 20);
+	
+	Util::DrawLine(topLeft, topRight);
 }
 
 

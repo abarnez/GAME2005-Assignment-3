@@ -31,9 +31,8 @@ private:
 	bool m_playerFacingRight;
 
 	float bVelocity;
-	float coeffecient;
-	bool Cube;
-	bool showMouse;
+	float momentumCoefficient;
+	bool isCube, justHitObject;
 
 	// UI Items
 	Button* m_pBackButton;
