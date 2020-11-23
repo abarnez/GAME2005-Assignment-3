@@ -119,6 +119,7 @@ void Scene2::update()
 
 void Scene2::clean()
 {
+	SDL_SetRelativeMouseMode(SDL_FALSE);
 	SDL_ShowCursor(1);
 	removeAllChildren();
 }
@@ -150,8 +151,6 @@ void Scene2::start()
 
 	// Set GUI Title
 	m_guiTitle = "Scene 2";
-	
-	SDL_ShowCursor(0);
 
 	isCube = false, justHitObject = false;
 	momentumCoefficient = 0;
