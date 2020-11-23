@@ -45,7 +45,7 @@ void Scene2::update()
 	bVelocity = m_pBall->getRigidBody()->velocity.x;
 
 	//paddle top left top right	
-	float paddle_x = m_pPaddle->getTransform()->position.x;
+	/*float paddle_x = m_pPaddle->getTransform()->position.x;
 	float paddle_y = m_pPaddle->getTransform()->position.y;
 	float paddle_width = m_pPaddle->getWidth();
 	glm::vec2 topLeft;
@@ -61,50 +61,53 @@ void Scene2::update()
 	glm::vec2 bottomLeft;
 	bottomLeft = glm::vec2(ball_x - ball_width / 2, ball_y + ball_height / 2);
 	glm::vec2 bottomRight;
-	bottomRight = glm::vec2(ball_x + ball_width / 2, ball_y + ball_height / 2);
+	bottomRight = glm::vec2(ball_x + ball_width / 2, ball_y + ball_height / 2);*/
 
 	float height = m_pBall->getHeight() / 2;
 	float width = m_pBall->getWidth() / 2;
 
+	glm::vec2 vel = m_pBall->getRigidBody()->velocity;
+
 	//Collision check
-	if (CollisionManager::circleAABBCheck(m_pBall, m_pPaddle))
+	if (!m_pBall->getRigidBody()->isColliding)
 	{
-		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
-		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
-	}
-	else if (m_pBall->getTransform()->position.y <= 0 + height)
-	{
-		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
-		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
+		if (CollisionManager::circleAABBCheck(m_pBall, m_pPaddle))
+		{
+			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
+		}
+		else if (m_pBall->getTransform()->position.y <= 0 + height)
+		{
+			std::cout << "Velocity in on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 
-		std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
-	}
-	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
-	{
-		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
-		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
+			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
 
-		std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
-	}
-	else if (m_pBall->getTransform()->position.x <= 0 + width)
-	{
-		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x;
-		m_pBall->getRigidBody()->velocity.x = -reduceVelocityByCoefficient;
+			std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
+		}
+		else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
+		{
+			std::cout << "Velocity in on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
 
-		std::cout << "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
-	}
-	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
-	{
-		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x;
-		m_pBall->getRigidBody()->velocity.x = -reduceVelocityByCoefficient;
+			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
 
-		std::cout <<  "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+			std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
+		}
+		else if (m_pBall->getTransform()->position.x <= 0 + width)
+		{
+			std::cout << "Velocity in on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+
+			m_pBall->getRigidBody()->velocity.x = -(m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x);
+
+			std::cout << "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+		}
+		else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
+		{
+			std::cout << "Velocity in on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+
+			m_pBall->getRigidBody()->velocity.x = -(m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x);
+
+			std::cout << "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
+		}
 	}
-	
-	float bottom = m_pPaddle->getTransform()->position.y + m_pPaddle->getHeight() / 2;
-	float top = m_pPaddle->getTransform()->position.y - m_pPaddle->getHeight() / 2;
-	float left = m_pPaddle->getTransform()->position.x - m_pPaddle->getWidth() / 2;
-	float right = m_pPaddle->getTransform()->position.x + m_pPaddle->getWidth() / 2;
 
 	//lables
 	SetText();
@@ -150,7 +153,7 @@ void Scene2::start()
 	
 	SDL_ShowCursor(0);
 
-	isCube = false;
+	isCube = false, justHitObject = false;
 	momentumCoefficient = 0;
 
 	//Paddle

@@ -264,3 +264,4 @@ __pycache__/
 *.exe
 
 *.idb
+Template/imgui.ini
