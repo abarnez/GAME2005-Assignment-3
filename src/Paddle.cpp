@@ -38,9 +38,9 @@ void Paddle::draw()
 
 	float width = getWidth(), height = getHeight();
 	glm::vec2 topLeft;
-	topLeft = glm::vec2(x - width / 4, y - 20);
+	topLeft = glm::vec2(x - width / 2.05, y - 30);
 	glm::vec2 topRight;
-	topRight = glm::vec2(x + width / 4, y - 20);
+	topRight = glm::vec2(x + width / 2.05, y - 30);
 	
 	Util::DrawLine(topLeft, topRight);
 }

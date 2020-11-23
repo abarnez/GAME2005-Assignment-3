@@ -57,9 +57,9 @@ void Scene2::update()
 	float ball_width = m_pBall->getWidth();
 	float ball_height = m_pBall->getHeight();
 	glm::vec2 bottomLeft;
-	bottomLeft = glm::vec2(ball_x - ball_width, ball_y + ball_height / 2);
+	bottomLeft = glm::vec2(ball_x - ball_width / 2, ball_y + ball_height / 2);
 	glm::vec2 bottomRight;
-	bottomRight = glm::vec2(ball_x + ball_width, ball_y + ball_height / 2);
+	bottomRight = glm::vec2(ball_x + ball_width / 2, ball_y + ball_height / 2);
 
 	float height = m_pBall->getHeight() / 2;
 	float width = m_pBall->getWidth() / 2;
