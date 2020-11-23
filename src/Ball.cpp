@@ -48,6 +48,7 @@ void Ball::draw()
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(x + width / 2, y + height / 2);
 	Util::DrawLine(bottomLeft, bottomRight);
+	
 	/*if(cube)
 	{
 		TextureManager::Instance()->draw("Cube", x, y, 0, 255, true);
