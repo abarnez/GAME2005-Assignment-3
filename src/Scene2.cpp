@@ -49,9 +49,9 @@ void Scene2::update()
 	float paddle_y = m_pPaddle->getTransform()->position.y;
 	float paddle_width = m_pPaddle->getWidth();
 	glm::vec2 topLeft;
-	topLeft = glm::vec2(paddle_x - paddle_width / 4 , paddle_y - 20);
+	topLeft = glm::vec2(paddle_x - paddle_width / 2.05 , paddle_y - 30);
 	glm::vec2 topRight;
-	topRight = glm::vec2(paddle_x + paddle_width / 4 , paddle_y - 20);
+	topRight = glm::vec2(paddle_x + paddle_width / 2.05 , paddle_y - 30);
 	
 	//ball bottom left bottom right
 	float ball_x = m_pBall->getTransform()->position.x;

@@ -49,7 +49,6 @@ void Ball::draw()
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(x + width / 2, y + height / 2);
 	Util::DrawLine(bottomLeft, bottomRight);
-	bottomRight = glm::vec2(x + width, y + height / 2);
 
 	if (objectName == "Ball")
 	{
@@ -62,13 +61,6 @@ void Ball::draw()
 		glm::vec2 TopLeft = glm::vec2(x - getWidth() / 2, y - getHeight() / 2);
 		Util::DrawRect(TopLeft, getWidth(), getHeight());
 	}
-	/*if(cube)
-	{
-		TextureManager::Instance()->draw("Cube", x, y, 0, 255, true);
-	}
-	else {
-		TextureManager::Instance()->draw("Ball", x, y, 0, 255, true);
-	}*/
 }
 
 
