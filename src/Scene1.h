@@ -45,6 +45,7 @@ private:
 	Button* m_pBackButton;
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
+	Label* m_pInstructionsLabel2;
 
 	unsigned int lastTime, currentTime;
 	bool showBullets, showWire;

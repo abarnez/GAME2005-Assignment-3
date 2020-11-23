@@ -223,7 +223,7 @@ void Scene2::CreateLabels()
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
 	addChild(m_pInstructionsLabel);
 
-	m_pInstructionsLabel2 = new Label("Press (2) to open Scene 2", "Consolas", 20.0f, { 0, 255, 0, 255 });
+	m_pInstructionsLabel2 = new Label("Press (1) to open Scene 1", "Consolas", 20.0f, { 0, 255, 0, 255 });
 	m_pInstructionsLabel2->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 50.0f);
 	addChild(m_pInstructionsLabel2);
 
