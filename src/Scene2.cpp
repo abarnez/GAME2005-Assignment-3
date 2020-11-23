@@ -63,8 +63,8 @@ void Scene2::update()
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(ball_x + ball_width / 2, ball_y + ball_height / 2);*/
 
-	float height = m_pBall->getHeight() / 2;
-	float width = m_pBall->getWidth() / 2;
+	float height = m_pBall->getHeight() / 2 + 3;
+	float width = m_pBall->getWidth() / 2 + 3;
 
 	glm::vec2 vel = m_pBall->getRigidBody()->velocity;
 
@@ -73,7 +73,10 @@ void Scene2::update()
 	{
 		if (CollisionManager::circleAABBCheck(m_pBall, m_pPaddle))
 		{
-			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
+			std::cout << "Paddle Velocity: " << m_pPaddle->getRigidBody()->velocity.x;
+			vel.x += m_pPaddle->getRigidBody()->velocity.x / 2;
+			m_pBall->getRigidBody()->velocity.x = vel.x;
+			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y);
 		}
 		else if (m_pBall->getTransform()->position.y <= 0 + height)
 		{
@@ -114,8 +117,6 @@ void Scene2::update()
 
 	updateDisplayList();
 }
-
-
 
 void Scene2::clean()
 {
