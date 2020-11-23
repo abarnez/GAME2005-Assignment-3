@@ -49,6 +49,7 @@ void Ball::draw()
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(x + width / 2, y + height / 2);
 
+
 	if (objectName == "Ball")
 	{
 		const auto circleCentre = getTransform()->position;

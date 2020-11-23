@@ -41,8 +41,16 @@ void Paddle::draw()
 	topLeft = glm::vec2(x - width / 2.05, y - 30);
 	glm::vec2 topRight;
 	topRight = glm::vec2(x + width / 2.05, y - 30);
+
+
+	//defined bottom right and left corners
+	glm::vec2 bottomRight;
+	bottomRight = topRight + glm::vec2(0.0f, 60.0f);
+	glm::vec2 bottomLeft;
+	bottomLeft = topLeft + glm::vec2(0.0f, 60.0f);
 	
 	Util::DrawLine(topLeft, topRight);
+
 }
 
 
