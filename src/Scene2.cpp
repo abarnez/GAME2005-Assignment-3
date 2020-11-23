@@ -37,9 +37,9 @@ void Scene2::update()
 	float paddle_y = m_pPaddle->getTransform()->position.y;
 	float paddle_width = m_pPaddle->getWidth();
 	glm::vec2 topLeft;
-	topLeft = glm::vec2(paddle_x - paddle_width / 2 , paddle_y - 20);
+	topLeft = glm::vec2(paddle_x - paddle_width / 4 , paddle_y - 20);
 	glm::vec2 topRight;
-	topRight = glm::vec2(paddle_x + paddle_width / 2 , paddle_y - 20);
+	topRight = glm::vec2(paddle_x + paddle_width / 4 , paddle_y - 20);
 	
 	//ball bottom left bottom right
 	float ball_x = m_pBall->getTransform()->position.x;
@@ -178,7 +178,7 @@ void Scene2::start()
 	addChild(m_pInstructionsLabel);
 
 	VelocityLabel = new Label;
-	VelocityLabel->getTransform()->position = glm::vec2(200.0f, 700.0f);
+	VelocityLabel->getTransform()->position = glm::vec2(215.0f, 700.0f);
 	addChild(VelocityLabel);
 
 	PositionLabel = new Label;
