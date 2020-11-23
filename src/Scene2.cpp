@@ -99,6 +99,14 @@ void Scene2::update()
 	float left = m_pPaddle->getTransform()->position.x - m_pPaddle->getWidth() / 2;
 	float right = m_pPaddle->getTransform()->position.x + m_pPaddle->getWidth() / 2;
 
+	if(showMouse)
+	{
+		SDL_ShowCursor(1);
+	}
+	else {
+		SDL_ShowCursor(0);
+	}
+
 	/*if (m_pBall->getTransform()->position.y <= top + m_pBall->getHeight() / 2
 		&& m_pBall->getTransform()->position.y >= bottom - m_pBall->getHeight() / 2)
 	{
@@ -149,6 +157,7 @@ void Scene2::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(SCENE_2);
 	}
+	
 }
 
 void Scene2::start()
@@ -160,6 +169,7 @@ void Scene2::start()
 	// Set GUI Title
 	m_guiTitle = "Scene 2";
 	
+	showMouse = false;
 	SDL_ShowCursor(0);
 
 	//Paddle
@@ -205,6 +215,9 @@ void Scene2::GUI_Function()
 		m_pBall->getRigidBody()->velocity.x = 0;
 		m_pBall->getRigidBody()->velocity.y = 0;
 		m_pBall->getTransform()->position = glm::vec2(550, 100);
+	}
+	if (ImGui::Checkbox("Show Mouse: ",&showMouse )){
+		
 	}
 
 	if (ImGui::Checkbox("Cube: ", &Cube))

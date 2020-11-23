@@ -33,6 +33,7 @@ private:
 	float bVelocity;
 	float coeffecient;
 	bool Cube;
+	bool showMouse;
 
 	// UI Items
 	Button* m_pBackButton;
