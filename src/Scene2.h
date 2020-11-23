@@ -38,6 +38,7 @@ private:
 	Button* m_pBackButton;
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
+	Label* m_pInstructionsLabel2;
 	Paddle* m_pPaddle;
 	Ball* m_pBall;
 	int mouse_x;
