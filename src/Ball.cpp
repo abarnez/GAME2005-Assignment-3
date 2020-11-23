@@ -48,7 +48,10 @@ void Ball::draw()
 	bottomLeft = glm::vec2(x - width / 2, y + height / 2);
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(x + width / 2, y + height / 2);
+
+
 	Util::DrawLine(bottomLeft, bottomRight);
+
 
 	if (objectName == "Ball")
 	{
