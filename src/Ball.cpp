@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "Game.h"
 #include "Ball.h"
+#include <algorithm>
 
 Ball::Ball()
 {
@@ -48,6 +49,19 @@ void Ball::draw()
 	glm::vec2 bottomRight;
 	bottomRight = glm::vec2(x + width / 2, y + height / 2);
 	Util::DrawLine(bottomLeft, bottomRight);
+	bottomRight = glm::vec2(x + width, y + height / 2);
+
+	if (objectName == "Ball")
+	{
+		const auto circleCentre = getTransform()->position;
+		const int circleRadius = std::max(getWidth() * 0.5f, getHeight() * 0.5f);
+		Util::DrawCircle(circleCentre, circleRadius);
+	}
+	else
+	{
+		glm::vec2 TopLeft = glm::vec2(x - getWidth() / 2, y - getHeight() / 2);
+		Util::DrawRect(TopLeft, getWidth(), getHeight());
+	}
 	/*if(cube)
 	{
 		TextureManager::Instance()->draw("Cube", x, y, 0, 255, true);

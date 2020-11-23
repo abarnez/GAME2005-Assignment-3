@@ -27,13 +27,15 @@ void Scene2::draw()
 	{
 		GUI_Function();
 		SDL_ShowCursor(1);
+		SDL_SetRelativeMouseMode(SDL_FALSE);
 	}
 	else
 	{
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 		SDL_ShowCursor(0);
 		SDL_GetMouseState(&mouse_x, &mouse_y);
-		m_pPaddle->getTransform()->position.x = mouse_x;
-		//float direction = mouse_x - m_pPaddle->getTransform()->position.x;
+		float direction = mouse_x - m_pPaddle->getTransform()->position.x;
+		m_pPaddle->getRigidBody()->velocity.x = direction * 3;
 
 	}
 }
@@ -65,11 +67,10 @@ void Scene2::update()
 	float width = m_pBall->getWidth() / 2;
 
 	//Collision check
-	if (CollisionManager::doesCollide(topLeft, topRight, bottomLeft, bottomRight))
+	if (CollisionManager::circleAABBCheck(m_pBall, m_pPaddle))
 	{
 		float reduceVelocityByCoefficient = m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y;
 		m_pBall->getRigidBody()->velocity.y = -reduceVelocityByCoefficient;
-		std::cout << "Paddle Velocity on x:" << m_pPaddle->getRigidBody()->acceleration.x << "\n";
 	}
 	else if (m_pBall->getTransform()->position.y <= 0 + height)
 	{

@@ -18,7 +18,7 @@ void StartScene::draw()
 	drawDisplayList();
 
 	// DEBUG PURPOSES
-	TheGame::Instance()->changeSceneState(SCENE_1);
+	TheGame::Instance()->changeSceneState(SCENE_2);
 }
 
 void StartScene::update()
