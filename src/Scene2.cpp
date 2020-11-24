@@ -41,7 +41,7 @@ void Scene2::draw()
 		auto deltaTime = now - lastMovement;
 		auto distance = glm::vec2(abs(currentPos.x - mouse_x), abs(currentPos.y - mouse_y));
 
-		auto speed = glm::vec2(round(distance.x / deltaTime * 1000), round(distance.y / deltaTime * 1000));
+		auto speed = glm::vec2(round(distance.x / deltaTime * 1000), round(distance.y / deltaTime * 1000) / 3);
 
 		m_pPaddle->getRigidBody()->velocity = speed;
 		std::cout << "Speed X: " << speed.x << ", Y: " << speed.y << "\n";
@@ -64,7 +64,7 @@ void Scene2::update()
 	float height = m_pBall->getHeight() / 2;
 	float width = m_pBall->getWidth() / 2;
 
-	if (isCube)
+	if (isBox)
 	{
 		CollisionManager::AABBCheck(m_pBall, m_pPaddle);
 	}
@@ -135,7 +135,7 @@ void Scene2::start()
 	// Set GUI Title
 	m_guiTitle = "Scene 2";
 
-	isCube = false;
+	isBox = false;
 	momentumCoefficient = 0.6f;
 	lastMovement = SDL_GetTicks();
 
@@ -176,9 +176,9 @@ void Scene2::GUI_Function()
 		m_pBall->getTransform()->position = glm::vec2(550, 100);
 	}
 	
-	if (ImGui::Checkbox("Make cube?", &isCube))
+	if (ImGui::Checkbox("Make box?", &isBox))
 	{
-		m_pBall->objectName = isCube ? "Cube" : "Ball";
+		m_pBall->objectName = isBox ? "Box" : "Ball";
 		m_pBall->getTransform()->position = glm::vec2(550, 100);
 		m_pBall->getRigidBody()->velocity.x = 0;
 		m_pBall->getRigidBody()->velocity.y = 0;
@@ -192,7 +192,7 @@ void Scene2::GUI_Function()
 			m_pPaddle->getRigidBody()->mass = m_pBall->getRigidBody()->mass;
 	}
 
-	ImGui::SliderFloat("Ball/Cube Mass (kg)", &m_pBall->getRigidBody()->mass, 3, 10);
+	ImGui::SliderFloat("Ball/Box Mass (kg)", &m_pBall->getRigidBody()->mass, 3, 10);
 
 	ImGui::Separator();
 

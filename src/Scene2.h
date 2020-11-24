@@ -32,7 +32,7 @@ private:
 
 	float bVelocity;
 	float momentumCoefficient;
-	bool isCube;
+	bool isBox;
 
 	int lastMovement;
 

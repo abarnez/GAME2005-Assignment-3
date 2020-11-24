@@ -12,7 +12,7 @@ Ball::Ball()
 
 	auto size = TextureManager::Instance()->getTextureSize("Ball");
 
-	TextureManager::Instance()->load("../Assets/textures/cube.png", "Cube");
+	TextureManager::Instance()->load("../Assets/textures/cube.png", "Box");
 
 	//auto size = TextureManager::Instance()->getTextureSize("Cube");
 
