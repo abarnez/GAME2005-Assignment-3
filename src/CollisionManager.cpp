@@ -242,7 +242,7 @@ void CollisionManager::reverseCollision(GameObject* object1, GameObject* object2
 		float m1 = object1->getRigidBody()->mass;
 		float m2 = object2->getRigidBody()->mass;
 
-		//std::cout << "Ball Mass, Paddle Mass: " << m1 << ", " << m2 << " Ball Initial: " << v1iX << ", " << v1iY << " Paddle Initial: " << v2iX << ", " << v2iY << "\n";
+		std::cout << "Ball Mass, Paddle Mass: " << m1 << ", " << m2 << "\nBall Initial Vel: " << v1iX << ", " << v1iY << " Paddle Initial Vel: " << v2iX << ", " << v2iY << "\n";
 		int changePos = -1; // -1 nothing, 0 X, 1 Y.
 		// top right or top left
 		if ((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0))

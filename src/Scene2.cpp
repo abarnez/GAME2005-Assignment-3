@@ -33,12 +33,27 @@ void Scene2::draw()
 	{
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		SDL_ShowCursor(0);
-		SDL_GetMouseState(&mouse_x, &mouse_y);
-		float xMinusX = mouse_x - m_pPaddle->getTransform()->position.x;
+		SDL_GetMouseState(&mouse_x, &mouse_y); 
+		
+		auto now = SDL_GetTicks();
+		auto currentPos = m_pPaddle->getTransform()->position;
+
+		auto deltaTime = now - lastMovement;
+		auto distance = glm::vec2(abs(currentPos.x - mouse_x), abs(currentPos.y - mouse_y));
+
+		auto speed = glm::vec2(round(distance.x / deltaTime * 1000), round(distance.y / deltaTime * 1000));
+
+		m_pPaddle->getRigidBody()->velocity = speed;
+		std::cout << "Speed X: " << speed.x << ", Y: " << speed.y << "\n";
+		m_pPaddle->getTransform()->position = glm::vec2(mouse_x, mouse_y);
+
+		lastMovement = now;
+
+		/*float xMinusX = mouse_x - m_pPaddle->getTransform()->position.x;
 		float yMinusY = mouse_y - m_pPaddle->getTransform()->position.y;
 		glm::vec2 displacement = glm::vec2(xMinusX, yMinusY);
 		m_pPaddle->getRigidBody()->velocity = glm::vec2(displacement.x / 3, displacement.y / 3);
-		m_pPaddle->getTransform()->position += m_pPaddle->getRigidBody()->velocity;
+		m_pPaddle->getTransform()->position += m_pPaddle->getRigidBody()->velocity;*/
 
 	}
 }
@@ -120,8 +135,9 @@ void Scene2::start()
 	// Set GUI Title
 	m_guiTitle = "Scene 2";
 
-	isCube = false, justHitObject = false;
+	isCube = false;
 	momentumCoefficient = 0.6f;
+	lastMovement = SDL_GetTicks();
 
 	//Paddle
 	m_pPaddle = new Paddle();
@@ -170,13 +186,13 @@ void Scene2::GUI_Function()
 
 	ImGui::SliderFloat("Momentum Decrease by (%)", &momentumCoefficient, 0, 1);
 
-	if (ImGui::SliderFloat("Player Mass (kg)", &m_pPaddle->getRigidBody()->mass, 0.5, 10))
+	if (ImGui::SliderFloat("Player Mass (kg)", &m_pPaddle->getRigidBody()->mass, 3, 10))
 	{
 		if (m_pPaddle->getRigidBody()->mass < m_pBall->getRigidBody()->mass)
 			m_pPaddle->getRigidBody()->mass = m_pBall->getRigidBody()->mass;
 	}
 
-	ImGui::SliderFloat("Ball/Cube Mass (kg)", &m_pBall->getRigidBody()->mass, 0.5, 10);
+	ImGui::SliderFloat("Ball/Cube Mass (kg)", &m_pBall->getRigidBody()->mass, 3, 10);
 
 	ImGui::Separator();
 
