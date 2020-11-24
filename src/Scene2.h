@@ -34,6 +34,8 @@ private:
 	float momentumCoefficient;
 	bool isCube, justHitObject;
 
+	int lastMovement;
+
 	// UI Items
 	Button* m_pBackButton;
 	Button* m_pNextButton;
@@ -53,4 +55,5 @@ private:
 
 	void SetText();
 	void CreateLabels();
+	void GetReflectedVelocity(float x1, float y1, float x2, float y2);
 };

@@ -29,6 +29,8 @@ public:
 	static bool pointRectCheck(glm::vec2 point, glm::vec2 rect_start, float rect_width, float rect_height);
 
 	static bool doesCollide(glm::vec2 topLeft, glm::vec2 topRight, glm::vec2 bottomLeft, glm::vec2 bottomRight);
+
+	static void reverseCollision(GameObject* object1, GameObject* object2);
 	
 private:
 	CollisionManager();

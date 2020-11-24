@@ -14,19 +14,11 @@ public:
 	void update() override;
 	void clean() override;
 
-	void addForce(glm::vec2 Amount);
 	void move();
-
-	bool doesUpdate = false; 
-
-	float Gravity;
-	float pixelsPerMeter;
-	float Mass;
-	float nextPosition;
-	bool showWire;
-
-	glm::vec2 Force;
 	void RandomPos();
+
+	bool doesUpdate, showWire; 
+	float Gravity, pixelsPerMeter, Mass, nextPosition;
 
 };
 

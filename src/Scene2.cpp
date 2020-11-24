@@ -34,82 +34,49 @@ void Scene2::draw()
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		SDL_ShowCursor(0);
 		SDL_GetMouseState(&mouse_x, &mouse_y);
-		float direction = mouse_x - m_pPaddle->getTransform()->position.x;
-		m_pPaddle->getRigidBody()->velocity.x = direction * 3;
+		float xMinusX = mouse_x - m_pPaddle->getTransform()->position.x;
+		float yMinusY = mouse_y - m_pPaddle->getTransform()->position.y;
+		glm::vec2 displacement = glm::vec2(xMinusX, yMinusY);
+		m_pPaddle->getRigidBody()->velocity = glm::vec2(displacement.x / 3, displacement.y / 3);
+		m_pPaddle->getTransform()->position += m_pPaddle->getRigidBody()->velocity;
 
 	}
 }
 
 void Scene2::update()
 {
-	bVelocity = m_pBall->getRigidBody()->velocity.x;
-
-	//paddle top left top right	
-	/*float paddle_x = m_pPaddle->getTransform()->position.x;
-	float paddle_y = m_pPaddle->getTransform()->position.y;
-	float paddle_width = m_pPaddle->getWidth();
-	glm::vec2 topLeft;
-	topLeft = glm::vec2(paddle_x - paddle_width / 2.05 , paddle_y - 30);
-	glm::vec2 topRight;
-	topRight = glm::vec2(paddle_x + paddle_width / 2.05 , paddle_y - 30);
-	
-	//ball bottom left bottom right
-	float ball_x = m_pBall->getTransform()->position.x;
-	float ball_y = m_pBall->getTransform()->position.y;
-	float ball_width = m_pBall->getWidth();
-	float ball_height = m_pBall->getHeight();
-	glm::vec2 bottomLeft;
-	bottomLeft = glm::vec2(ball_x - ball_width / 2, ball_y + ball_height / 2);
-	glm::vec2 bottomRight;
-	bottomRight = glm::vec2(ball_x + ball_width / 2, ball_y + ball_height / 2);*/
-
-	float height = m_pBall->getHeight() / 2 + 3;
-	float width = m_pBall->getWidth() / 2 + 3;
-
-	glm::vec2 vel = m_pBall->getRigidBody()->velocity;
-
 	//Collision check
-	if (!m_pBall->getRigidBody()->isColliding)
+	float height = m_pBall->getHeight() / 2;
+	float width = m_pBall->getWidth() / 2;
+
+	if (isCube)
 	{
-		if (CollisionManager::circleAABBCheck(m_pBall, m_pPaddle))
-		{
-			std::cout << "Paddle Velocity: " << m_pPaddle->getRigidBody()->velocity.x;
-			vel.x += m_pPaddle->getRigidBody()->velocity.x / 2;
-			m_pBall->getRigidBody()->velocity.x = vel.x;
-			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y);
-		}
-		else if (m_pBall->getTransform()->position.y <= 0 + height)
-		{
-			std::cout << "Velocity in on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
+		CollisionManager::AABBCheck(m_pBall, m_pPaddle);
+	}
+	else
+	{
+		CollisionManager::circleAABBCheck(m_pBall, m_pPaddle);
+	}
 
-			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
-
-			std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
-		}
-		else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
-		{
-			std::cout << "Velocity in on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
-
-			m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
-
-			std::cout << "Velocity on y:" << m_pBall->getRigidBody()->velocity.y << "\n";
-		}
-		else if (m_pBall->getTransform()->position.x <= 0 + width)
-		{
-			std::cout << "Velocity in on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
-
-			m_pBall->getRigidBody()->velocity.x = -(m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x);
-
-			std::cout << "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
-		}
-		else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
-		{
-			std::cout << "Velocity in on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
-
-			m_pBall->getRigidBody()->velocity.x = -(m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x);
-
-			std::cout << "Velocity on x:" << m_pBall->getRigidBody()->velocity.x << "\n";
-		}
+	if (m_pBall->getTransform()->position.y <= 0 + height)
+	{
+		m_pBall->getTransform()->position.y = height + 1;
+		m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
+	}
+	else if (m_pBall->getTransform()->position.y >= Config::SCREEN_HEIGHT - height)
+	{
+		m_pBall->getTransform()->position.y = Config::SCREEN_HEIGHT - height - 1;
+		m_pBall->getRigidBody()->velocity.y = -(m_pBall->getRigidBody()->velocity.y - momentumCoefficient * m_pBall->getRigidBody()->velocity.y);
+	}
+	else if (m_pBall->getTransform()->position.x <= 0 + width)
+	{
+		m_pBall->getTransform()->position.x = width + 1;
+		m_pBall->getRigidBody()->velocity.x = -(m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x);
+	}
+	else if (m_pBall->getTransform()->position.x >= Config::SCREEN_WIDTH - width)
+	{
+		m_pBall->getTransform()->position.x = Config::SCREEN_WIDTH - width - 1;
+		m_pBall->getRigidBody()->velocity.x = -(m_pBall->getRigidBody()->velocity.x - momentumCoefficient * m_pBall->getRigidBody()->velocity.x);
 	}
 
 	//lables
@@ -154,17 +121,21 @@ void Scene2::start()
 	m_guiTitle = "Scene 2";
 
 	isCube = false, justHitObject = false;
-	momentumCoefficient = 0;
+	momentumCoefficient = 0.6f;
 
 	//Paddle
 	m_pPaddle = new Paddle();
 	addChild(m_pPaddle);
 	m_pPaddle->getTransform()->position = glm::vec2(550, 750);
 
+	m_pPaddle->getRigidBody()->mass = 5;
+
 	//Ball
 	m_pBall = new Ball();
 	addChild(m_pBall);
 	m_pBall->getTransform()->position = glm::vec2(550, 100);
+
+	m_pBall->getRigidBody()->mass = 3;
 
 	CreateLabels();
 	
@@ -197,8 +168,16 @@ void Scene2::GUI_Function()
 		m_pBall->getRigidBody()->velocity.y = 0;
 	}
 
-
 	ImGui::SliderFloat("Momentum Decrease by (%)", &momentumCoefficient, 0, 1);
+
+	if (ImGui::SliderFloat("Player Mass (kg)", &m_pPaddle->getRigidBody()->mass, 0.5, 10))
+	{
+		if (m_pPaddle->getRigidBody()->mass < m_pBall->getRigidBody()->mass)
+			m_pPaddle->getRigidBody()->mass = m_pBall->getRigidBody()->mass;
+	}
+
+	ImGui::SliderFloat("Ball/Cube Mass (kg)", &m_pBall->getRigidBody()->mass, 0.5, 10);
+
 	ImGui::Separator();
 
 	ImGui::End();

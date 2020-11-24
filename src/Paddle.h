@@ -19,6 +19,8 @@ public:
 	bool doesUpdate = false;
 	float ACCELERATION = 200.0f;
 
+	glm::vec2 lastPos;
+
 private:
 	glm::vec2 m_direction;
 };

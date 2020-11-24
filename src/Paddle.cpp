@@ -35,29 +35,13 @@ void Paddle::draw()
 
 	// draw the Paddle
 	TextureManager::Instance()->draw("Paddle", x, y, 0, 255, true);
-
-	float width = getWidth(), height = getHeight();
-	glm::vec2 topLeft;
-	topLeft = glm::vec2(x - width / 2.05, y - 30);
-	glm::vec2 topRight;
-	topRight = glm::vec2(x + width / 2.05, y - 30);
-
-
-	//defined bottom right and left corners
-	glm::vec2 bottomRight;
-	bottomRight = topRight + glm::vec2(0.0f, 60.0f);
-	glm::vec2 bottomLeft;
-	bottomLeft = topLeft + glm::vec2(0.0f, 60.0f);
-	
-	Util::DrawLine(topLeft, topRight);
-
 }
 
 
 void Paddle::update()
 {
 	float deltaTime = 1.0f / 60.0f;
-	getTransform()->position += getRigidBody()->velocity * deltaTime;
+	//getTransform()->position += getRigidBody()->velocity * deltaTime;
 
 	if (getTransform()->position.x < getWidth() / 2)
 	{
@@ -69,8 +53,16 @@ void Paddle::update()
 		getTransform()->position.x = Config::SCREEN_WIDTH - getWidth() / 2;
 		freeze();
 	}
-
-	getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
+	else if (getTransform()->position.y > Config::SCREEN_HEIGHT - getHeight() / 2)
+	{
+		getTransform()->position.y = Config::SCREEN_HEIGHT - getHeight() / 2;
+		freeze();
+	}
+	else if (getTransform()->position.y < getHeight() / 2)
+	{
+		getTransform()->position.y = getHeight() / 2;
+		freeze();
+	}
 }
 
 void Paddle::clean()

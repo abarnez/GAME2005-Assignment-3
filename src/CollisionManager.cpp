@@ -46,7 +46,6 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 	const float p1Height = object1->getHeight();
 	const float p2Width = object2->getWidth();
 	const float p2Height = object2->getHeight();
-
 	if (
 		p1.x < p2.x + p2Width &&
 		p1.x + p1Width > p2.x&&
@@ -57,6 +56,7 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 		if (!object2->getRigidBody()->isColliding) {
 
 			object2->getRigidBody()->isColliding = true;
+			reverseCollision(object1, object2);
 
 			return true;
 		}
@@ -167,7 +167,6 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 	// circle
 	const auto circleCentre = object1->getTransform()->position;
 	const int circleRadius = std::max(object1->getWidth() * 0.5f, object1->getHeight() * 0.5f);
-
 	// aabb
 	const auto boxWidth = object2->getWidth();
 	int halfBoxWidth = boxWidth * 0.5f;
@@ -182,12 +181,7 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 
 			object2->getRigidBody()->isColliding = true;
 
-			const auto attackVector = object1->getTransform()->position - object2->getTransform()->position;
-			const auto normal = glm::vec2(0.0f, -1.0f);
-
-			const auto dot = Util::dot(attackVector, normal);
-			const auto angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
-
+			reverseCollision(object1, object2);
 			return true;
 		}
 		return false;
@@ -227,6 +221,75 @@ bool CollisionManager::doesCollide(glm::vec2 topLeft, glm::vec2 topRight, glm::v
 		return true;
 	}
 	return false;
+}
+
+void CollisionManager::reverseCollision(GameObject* object1, GameObject* object2)
+{
+	const auto attackVector = object1->getTransform()->position - object2->getTransform()->position;
+	const auto normal = glm::vec2(0.0f, -1.0f);
+
+	const auto dot = Util::dot(attackVector, normal);
+	const auto angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
+
+	if (object1->getType() == BALL && object2->getType() == PADDLE)
+	{
+		std::cout << "Hit paddle with ball.\n";
+
+		auto v1iX = object1->getRigidBody()->velocity.x;
+		auto v1iY = object1->getRigidBody()->velocity.y;
+		auto v2iX = object2->getRigidBody()->velocity.x;
+		auto v2iY = object2->getRigidBody()->velocity.y;
+		float m1 = object1->getRigidBody()->mass;
+		float m2 = object2->getRigidBody()->mass;
+
+		//std::cout << "Ball Mass, Paddle Mass: " << m1 << ", " << m2 << " Ball Initial: " << v1iX << ", " << v1iY << " Paddle Initial: " << v2iX << ", " << v2iY << "\n";
+		int changePos = -1; // -1 nothing, 0 X, 1 Y.
+		// top right or top left
+		if ((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0))
+		{
+			if (angle <= 45)
+			{
+				// Change Y velocity
+				changePos = 1;
+			}
+			else
+			{
+				// Change X velocity
+				changePos = 0;
+			}
+		}
+
+		// bottom right or bottom left
+		if ((attackVector.x > 0 && attackVector.y > 0) || (attackVector.x < 0 && attackVector.y > 0))
+		{
+			if (angle <= 135)
+			{
+				// Change X velocity
+				changePos = 0;
+			}
+			else
+			{
+				// Change Y velocity
+				changePos = 1;
+			}
+		}
+		if (changePos == 0)
+		{
+			float xVelocityFinal =
+				((m1 - m2 / m1 + m2) * v1iX) + ((2 * m2 / m1 + m2) * v2iX);
+			object1->getRigidBody()->velocity = glm::vec2(-xVelocityFinal, v1iY);
+
+			std::cout << "New Velocity X: " << xVelocityFinal << "\n";
+		}
+		else if (changePos == 1)
+		{
+			float yVelocityFinal =
+				((m1 - m2 / m1 + m2) * v1iY) + ((2 * m2 / m1 + m2) * v2iY);
+			object1->getRigidBody()->velocity = glm::vec2(v1iX, -yVelocityFinal);
+
+			std::cout << "New Velocity Y: " << yVelocityFinal << "\n";
+		}
+	}
 }
 
 CollisionManager::CollisionManager()

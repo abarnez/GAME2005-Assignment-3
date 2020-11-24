@@ -24,6 +24,7 @@ Bullet::Bullet()
 	Gravity = 9.8f;
 	Mass = 1;
 	showWire = true;
+	doesUpdate = false;
 }
 
 
@@ -71,12 +72,6 @@ void Bullet::clean()
 {
 
 }
-
-void Bullet::addForce(glm::vec2 Amount)
-{
-	Force += Amount;
-}
-
 void Bullet::move()
 {
 	float deltaTime = 1.0f / Config::FPS;
