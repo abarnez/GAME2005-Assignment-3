@@ -301,8 +301,6 @@ void Scene1::SetText()
 void Scene1::CreateLabels()
 {
 	const SDL_Color black = { 0, 0, 0, 255 };
-	
-	//new Label->setColour(green);
 
 	tankPosLabel = new Label("","Consolas",20, black);
 	tankPosLabel->getTransform()->position = glm::vec2(180.0f, 125.0f);

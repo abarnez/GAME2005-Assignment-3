@@ -68,7 +68,7 @@ void StartScene::start()
 	m_pGroupMemberLabel->setParent(this);
 	addChild(m_pGroupMemberLabel);
 
-	m_pInstructionsLabel = new Label("Press Scene 1 or 2 or press 1 or 2 to begin", "Consolas", 40, green, glm::vec2(Config::SCREEN_WIDTH / 2, 400.0f));
+	m_pInstructionsLabel = new Label("Click buttons below or press 1 or 2 to begin", "Consolas", 40, green, glm::vec2(Config::SCREEN_WIDTH / 2, 400.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
