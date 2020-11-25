@@ -49,11 +49,15 @@ void Scene2::draw()
 
 		lastMovement = now;*/
 
+		// Get Mouse pos, displacement & move paddle in that direction. Multiply displacement for heightened speed.
+
 		float xMinusX = mouse_x - m_pPaddle->getTransform()->position.x;
 		float yMinusY = mouse_y - m_pPaddle->getTransform()->position.y;
 		glm::vec2 displacement = glm::vec2(xMinusX, yMinusY);
 		m_pPaddle->getRigidBody()->velocity = glm::vec2(displacement.x * 10, displacement.y * 10);
-		m_pPaddle->getTransform()->position += displacement * 0.2f;// glm::vec2(mouse_x, mouse_y);//m_pPaddle->getRigidBody()->velocity;
+		m_pPaddle->getTransform()->position += displacement * 0.1f;
+
+		// glm::vec2(mouse_x, mouse_y);//m_pPaddle->getRigidBody()->velocity;
 
 	}
 }

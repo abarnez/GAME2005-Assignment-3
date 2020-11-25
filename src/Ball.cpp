@@ -54,7 +54,7 @@ void Ball::draw()
 	else
 	{
 		glm::vec2 TopLeft = glm::vec2(x - width * 0.5f, y - height * 0.5f);
-		//Util::DrawRect(TopLeft, getWidth(), getHeight());
+		Util::DrawRect(TopLeft, getWidth(), getHeight());
 	}
 }
 
