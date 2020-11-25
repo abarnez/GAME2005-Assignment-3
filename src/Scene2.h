@@ -49,6 +49,8 @@ private:
 	Label* MassLabel{};
 	Label* PositionLabel{};
 	Label* VelocityLabel{};
+	Label* pPositionLabel{};
+	Label* pVelocityLabel{};
 	Label* AccelerationLabel{};
 	Label* ForceLabel{};
 	Label* ThetaLabel{};
