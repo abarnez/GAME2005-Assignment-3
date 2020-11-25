@@ -275,17 +275,15 @@ void CollisionManager::reverseCollision(GameObject* object1, GameObject* object2
 		}
 		if (changePos == 0)
 		{
-			float xVelocityFinal =
-				((m1 - m2 / m1 + m2) * v1iX) + ((2 * m2 / m1 + m2) * v2iX);
-			object1->getRigidBody()->velocity = glm::vec2(-xVelocityFinal, v1iY);
+			float xVelocityFinal = (((m1 - m2) / (m1 + m2)) * v1iX) + (((2 * m2) / (m1 + m2)) * v2iX);
+			object1->getRigidBody()->velocity = glm::vec2(xVelocityFinal, v1iY);
 
 			std::cout << "New Velocity X: " << xVelocityFinal << "\n";
 		}
 		else if (changePos == 1)
 		{
-			float yVelocityFinal =
-				((m1 - m2 / m1 + m2) * v1iY) + ((2 * m2 / m1 + m2) * v2iY);
-			object1->getRigidBody()->velocity = glm::vec2(v1iX, -yVelocityFinal);
+			float yVelocityFinal = (((m1 - m2) / (m1 + m2)) * v1iY) + (((2 * m2) / (m1 + m2)) * v2iY);
+			object1->getRigidBody()->velocity = glm::vec2(v1iX, yVelocityFinal);
 
 			std::cout << "New Velocity Y: " << yVelocityFinal << "\n";
 		}
