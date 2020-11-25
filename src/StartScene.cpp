@@ -18,7 +18,7 @@ void StartScene::draw()
 	drawDisplayList();
 
 	// DEBUG PURPOSES
-	TheGame::Instance()->changeSceneState(SCENE_2);
+	//TheGame::Instance()->changeSceneState(SCENE_2);
 }
 
 void StartScene::update()
@@ -68,29 +68,59 @@ void StartScene::start()
 	m_pGroupMemberLabel->setParent(this);
 	addChild(m_pGroupMemberLabel);
 
-	m_pInstructionsLabel = new Label("Press start or 1 to begin", "Consolas", 40, green, glm::vec2(Config::SCREEN_WIDTH / 2, 400.0f));
+	m_pInstructionsLabel = new Label("Press Scene 1 or 2 or press 1 or 2 to begin", "Consolas", 40, green, glm::vec2(Config::SCREEN_WIDTH / 2, 400.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
-	// Start Button
-	m_pStartButton = new Button();
-	m_pStartButton->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 600.0f);
+	// Scene 1 Button
+	m_pScene1Button = new Button();
+	m_pScene1Button->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 600.0f);
+	m_pScene1ButtonLabel = new Label("Scene 1", "Dock51", 25, { 255, 255, 255, 255 }, m_pScene1Button->getTransform()->position);
 
-	m_pStartButton->addEventListener(CLICK, [&]()-> void
+	m_pScene1Button->addEventListener(CLICK, [&]()-> void
 	{
-		m_pStartButton->setActive(false);
+		m_pScene1Button->setActive(false);
 		TheGame::Instance()->changeSceneState(SCENE_1);
 	});
 	
-	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void
+	m_pScene1Button->addEventListener(MOUSE_OVER, [&]()->void
 	{
-		m_pStartButton->setAlpha(128);
+		m_pScene1Button->setAlpha(128);
+		m_pScene1ButtonLabel->setColour({ 255, 255, 255, 128 });
 	});
 
-	m_pStartButton->addEventListener(MOUSE_OUT, [&]()->void
+	m_pScene1Button->addEventListener(MOUSE_OUT, [&]()->void
 	{
-		m_pStartButton->setAlpha(255);
+		m_pScene1Button->setAlpha(255);
+		m_pScene1ButtonLabel->setColour({ 255, 255, 255, 255 });
 	});
-	addChild(m_pStartButton);
+	addChild(m_pScene1Button);
+	addChild(m_pScene1ButtonLabel);
+
+
+	// Scene 2 Button
+	m_pScene2Button = new Button("../Assets/textures/orangeButton.png", "Scene2Button", SCENE2_BUTTON);
+	m_pScene2Button->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH / 2, 675.0f);
+	m_pScene2ButtonLabel = new Label("Scene 2", "Dock51", 25, { 255, 255, 255, 255 }, m_pScene2Button->getTransform()->position);
+
+	m_pScene2Button->addEventListener(CLICK, [&]()-> void
+		{
+			m_pScene2Button->setActive(false);
+			TheGame::Instance()->changeSceneState(SCENE_2);
+		});
+
+	m_pScene2Button->addEventListener(MOUSE_OVER, [&]()->void
+		{
+			m_pScene2Button->setAlpha(128);
+			m_pScene2ButtonLabel->setColour({ 255, 255, 255, 128 });
+		});
+
+	m_pScene2Button->addEventListener(MOUSE_OUT, [&]()->void
+		{
+			m_pScene2Button->setAlpha(255);
+			m_pScene2ButtonLabel->setColour({ 255, 255, 255, 255 });
+		});
+	addChild(m_pScene2Button);
+	addChild(m_pScene2ButtonLabel);
 }
 

@@ -120,6 +120,11 @@ void Scene2::handleEvents()
 		TheGame::Instance()->quit();
 	}
 
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_0))
+	{
+		TheGame::Instance()->changeSceneState(START_SCENE);
+	}
+
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
 		TheGame::Instance()->changeSceneState(SCENE_1);
