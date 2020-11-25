@@ -24,7 +24,7 @@ public:
 
 	void SpawnBullet();
 	void ResetScene();
-
+	float Speed;
 private:
 	// IMGUI Function
 	void GUI_Function();
@@ -37,7 +37,7 @@ private:
 	int maxNumBullets;
 	static const int maxBullets = 100;
 	Tank* m_pTank;
-	float Speed;
+	
 
 	bool m_playerFacingRight;
 
@@ -60,6 +60,10 @@ private:
 	Label* MassLabel{};
 	Label* PositionLabel{};
 	Label* VelocityLabel{};
+	Label* tankPosLabel{};
+	Label* tankSpeedLabel{};
+	Label* bulletSpeedLabel{};
+	Label* maxBulletLabel{};
 	Label* AccelerationLabel{};
 	Label* ForceLabel{};
 	Label* ThetaLabel{};

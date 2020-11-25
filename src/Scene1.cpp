@@ -31,6 +31,7 @@ void Scene1::draw()
 
 void Scene1::update()
 {
+	SetText();
 	updateDisplayList();
 	if (showBullets)
 	{
@@ -215,6 +216,9 @@ void Scene1::start()
 	m_pInstructionsLabel2 = new Label("Press (2) to open scene 2 | Press (0) to go to the Menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
 	m_pInstructionsLabel2->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 50.0f);
 	addChild(m_pInstructionsLabel2);
+
+	CreateLabels();
+	
 }
 
 void Scene1::GUI_Function()
@@ -272,60 +276,42 @@ void Scene1::GUI_Function()
 
 void Scene1::SetText()
 {
-/*	std::string Text = "";
-	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
-	MassLabel->setText(Text);
+	std::string Text = "";
+	Text = "Tank Position (x, y): (" + std::to_string(m_pTank->getTransform()->position.x) + ", " + std::to_string(m_pTank->getTransform()->position.y) + ")";
+	tankPosLabel->setText(Text);
 
-	Text = "Position (x, y): (" + std::to_string(m_pLootCrate->getTransform()->position.x) + ", " + std::to_string(m_pLootCrate->getTransform()->position.y) + ")";
-	PositionLabel->setText(Text);
+	Text = "Tank Speed (x, y): (" + std::to_string(m_pTank->getRigidBody()->velocity.x) + ", " + std::to_string(m_pTank->getRigidBody()->velocity.y) + ")";
+	tankSpeedLabel->setText(Text);
 
-	Text = "Velocity (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->velocity.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->velocity.y) + ")";
-	VelocityLabel->setText(Text);
+	Text = "Bullet Speed: " + std::to_string(Speed);
+	bulletSpeedLabel->setText(Text);
 
-	Text = "Acceleration (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->acceleration.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->acceleration.y) + ")";
-	AccelerationLabel->setText(Text);
-
-	Text = "Force: " + std::to_string(m_pLootCrate->Mass * m_pLootCrate->getRigidBody()->acceleration.x) + " N";
-	ForceLabel->setText(Text);
-
-	Text = "Theta: " + std::to_string(glm::degrees(Theta));
-	ThetaLabel->setText(Text);*/
+	Text = "Bullets on Screen: " + std::to_string(m_pPool->active.size());
+	maxBulletLabel->setText(Text);
 }
 
 void Scene1::CreateLabels()
 {
-/*	const SDL_Color green = { 0, 255, 0, 255 };
+	const SDL_Color green = { 0, 0, 0, 255 };
+	
+	//new Label->setColour(green);
 
-	std::string Text = "";
-	Text = "Mass: " + std::to_string(m_pLootCrate->Mass);
-	MassLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 25.0f));
-	MassLabel->setParent(this);
-	addChild(MassLabel);
+	tankPosLabel = new Label("","Consolas",20,green);
+	tankPosLabel->getTransform()->position = glm::vec2(260.0f, 125.0f);
+	tankPosLabel->setColour(green);
+	addChild(tankPosLabel);
 
-	Text = "Position (x, y): (" + std::to_string(m_pLootCrate->getTransform()->position.x) + ", " + std::to_string(m_pLootCrate->getTransform()->position.y) + ")";
-	PositionLabel = new Label(Text, "Consolas", 15, green, glm::vec2(175.0f, 100.0f));
-	PositionLabel->setParent(this);
-	addChild(PositionLabel);
+	tankSpeedLabel = new Label("", "Consolas", 20, green);
+	tankSpeedLabel->getTransform()->position = glm::vec2(230.0f, 150.0f);
+	addChild(tankSpeedLabel);
 
-	Text = "Velocity (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->velocity.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->velocity.y) + ")";
-	VelocityLabel = new Label(Text, "Consolas", 15, green, glm::vec2(175.0f, 50.0f));
-	VelocityLabel->setParent(this);
-	addChild(VelocityLabel);
+	bulletSpeedLabel = new Label("", "Consolas", 20, green);
+	bulletSpeedLabel->getTransform()->position = glm::vec2(140.0f, 175.0f);
+	addChild(bulletSpeedLabel);
 
-	Text = "Acceleration (x, y): (" + std::to_string(m_pLootCrate->getRigidBody()->acceleration.x) + ", " + std::to_string(m_pLootCrate->getRigidBody()->acceleration.y) + ")";
-	AccelerationLabel = new Label(Text, "Consolas", 15, green, glm::vec2(175.0f, 75.0f));
-	AccelerationLabel->setParent(this);
-	addChild(AccelerationLabel);
-
-	Text = "Force: " + std::to_string(m_pLootCrate->Mass * m_pLootCrate->getRigidBody()->acceleration.x) + " N";
-	ForceLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 125.0f));
-	ForceLabel->setParent(this);
-	addChild(ForceLabel);
-
-	Text = "Theta: " + std::to_string(glm::degrees(Theta));
-	ThetaLabel = new Label(Text, "Consolas", 15, green, glm::vec2(100.0f, 150.0f));
-	ThetaLabel->setParent(this);
-	addChild(ThetaLabel);*/
+	maxBulletLabel = new Label("", "Consolas", 20, green);
+	maxBulletLabel->getTransform()->position = glm::vec2(130.0f, 200.0f);
+	addChild(maxBulletLabel);
 }
 
 void Scene1::SpawnBullet()
