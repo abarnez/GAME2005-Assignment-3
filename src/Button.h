@@ -5,11 +5,12 @@
 #include "DisplayObject.h"
 #include <SDL.h>
 #include "UIControl.h"
+#include "Label.h"
 
 class Button : public UIControl
 {
 public:
-	explicit Button(const std::string& image_path = "../Assets/textures/StartButton.png", 
+	explicit Button(const std::string& image_path = "../Assets/textures/orangeButton.png", 
 	                std::string button_name = "startButton", 
 	                GameObjectType type = START_BUTTON, 
 	                glm::vec2 position = glm::vec2(0.0f, 0.0f), bool is_centered = true);
@@ -24,6 +25,8 @@ public:
 	// button setters
 	void setAlpha(Uint8 alpha);
 	void setActive(bool value);
+
+	Label* buttonLabel;
 	
 private:
 	Uint8 m_alpha;

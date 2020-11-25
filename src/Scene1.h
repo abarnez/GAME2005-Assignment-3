@@ -43,7 +43,7 @@ private:
 
 	// UI Items
 	Button* m_pBackButton;
-	Button* m_pNextButton;
+	Label* m_pBackButtonLabel;
 	Label* m_pInstructionsLabel;
 	Label* m_pInstructionsLabel2;
 

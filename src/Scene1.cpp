@@ -137,6 +137,11 @@ void Scene1::handleEvents()
 		TheGame::Instance()->quit();
 	}
 
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_0))
+	{
+		TheGame::Instance()->changeSceneState(START_SCENE);
+	}
+
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
 		TheGame::Instance()->changeSceneState(SCENE_1);
@@ -189,8 +194,9 @@ void Scene1::start()
 	}
 
 	// Back Button
-	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
+	m_pBackButton = new Button("../Assets/textures/orangeButton.png", "backButton", BACK_BUTTON);
 	m_pBackButton->getTransform()->position = glm::vec2(100, 50);
+	m_pBackButtonLabel = new Label("Main Menu", "Dock51", 25, { 255, 255, 255, 255 }, m_pBackButton->getTransform()->position);
 	m_pBackButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pBackButton->setActive(false);
@@ -200,13 +206,16 @@ void Scene1::start()
 	m_pBackButton->addEventListener(MOUSE_OVER, [&]()->void
 	{
 		m_pBackButton->setAlpha(128);
+		m_pBackButtonLabel->setColour({ 255, 255, 255, 128 });
 	});
 
 	m_pBackButton->addEventListener(MOUSE_OUT, [&]()->void
 	{
 		m_pBackButton->setAlpha(255);
+		m_pBackButtonLabel->setColour({ 255, 255, 255, 255 });
 	});
 	addChild(m_pBackButton);
+	addChild(m_pBackButtonLabel);
 
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
