@@ -129,7 +129,6 @@ void Scene1::clean()
 
 void Scene1::handleEvents()
 {
-
 	EventManager::Instance().update();
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
@@ -286,10 +285,10 @@ void Scene1::GUI_Function()
 void Scene1::SetText()
 {
 	std::string Text = "";
-	Text = "Tank Position (x, y): (" + std::to_string(m_pTank->getTransform()->position.x) + ", " + std::to_string(m_pTank->getTransform()->position.y) + ")";
+	Text = "Tank Position (x): " + std::to_string(m_pTank->getTransform()->position.x);
 	tankPosLabel->setText(Text);
 
-	Text = "Tank Speed (x, y): (" + std::to_string(m_pTank->getRigidBody()->velocity.x) + ", " + std::to_string(m_pTank->getRigidBody()->velocity.y) + ")";
+	Text = "Tank Speed (x): " + std::to_string(m_pTank->getRigidBody()->velocity.x);
 	tankSpeedLabel->setText(Text);
 
 	Text = "Bullet Speed: " + std::to_string(Speed);
@@ -301,24 +300,23 @@ void Scene1::SetText()
 
 void Scene1::CreateLabels()
 {
-	const SDL_Color green = { 0, 0, 0, 255 };
+	const SDL_Color black = { 0, 0, 0, 255 };
 	
 	//new Label->setColour(green);
 
-	tankPosLabel = new Label("","Consolas",20,green);
-	tankPosLabel->getTransform()->position = glm::vec2(260.0f, 125.0f);
-	tankPosLabel->setColour(green);
+	tankPosLabel = new Label("","Consolas",20, black);
+	tankPosLabel->getTransform()->position = glm::vec2(180.0f, 125.0f);
 	addChild(tankPosLabel);
 
-	tankSpeedLabel = new Label("", "Consolas", 20, green);
-	tankSpeedLabel->getTransform()->position = glm::vec2(230.0f, 150.0f);
+	tankSpeedLabel = new Label("", "Consolas", 20, black);
+	tankSpeedLabel->getTransform()->position = glm::vec2(160.0f, 150.0f);
 	addChild(tankSpeedLabel);
 
-	bulletSpeedLabel = new Label("", "Consolas", 20, green);
+	bulletSpeedLabel = new Label("", "Consolas", 20, black);
 	bulletSpeedLabel->getTransform()->position = glm::vec2(140.0f, 175.0f);
 	addChild(bulletSpeedLabel);
 
-	maxBulletLabel = new Label("", "Consolas", 20, green);
+	maxBulletLabel = new Label("", "Consolas", 20, black);
 	maxBulletLabel->getTransform()->position = glm::vec2(130.0f, 200.0f);
 	addChild(maxBulletLabel);
 }

@@ -25,8 +25,6 @@ public:
 	// button setters
 	void setAlpha(Uint8 alpha);
 	void setActive(bool value);
-
-	Label* buttonLabel;
 	
 private:
 	Uint8 m_alpha;

@@ -230,7 +230,7 @@ void Scene2::SetText()
 
 void Scene2::CreateLabels()
 {
-	const SDL_Color green = { 0, 0, 0, 255 };
+	const SDL_Color black = { 0, 0, 0, 255 };
 
 	m_pInstructionsLabel = new Label("Press the grave accent (`) to toggle simulation menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
@@ -240,19 +240,19 @@ void Scene2::CreateLabels()
 	m_pInstructionsLabel2->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 50.0f);
 	addChild(m_pInstructionsLabel2);
 
-	VelocityLabel = new Label("", "Consolas", 20, green);
-	VelocityLabel->getTransform()->position = glm::vec2(275.0f, 700.0f);
+	VelocityLabel = new Label("", "Consolas", 20, black);
+	VelocityLabel->getTransform()->position = glm::vec2(275.0f, 670.0f);
 	addChild(VelocityLabel);
 
-	PositionLabel = new Label("", "Consolas", 20, green);
-	PositionLabel->getTransform()->position = glm::vec2(265.0f, 685.0f);
+	PositionLabel = new Label("", "Consolas", 20, black);
+	PositionLabel->getTransform()->position = glm::vec2(265.0f, 700.0f);
 	addChild(PositionLabel);
 
-	pVelocityLabel = new Label("", "Consolas", 20, green);
-	pVelocityLabel->getTransform()->position = glm::vec2(285.0f, 720.0f);
+	pVelocityLabel = new Label("", "Consolas", 20, black);
+	pVelocityLabel->getTransform()->position = glm::vec2(290.0f, 730.0f);
 	addChild(pVelocityLabel);
 
-	pPositionLabel = new Label("", "Consolas", 20, green);
-	pPositionLabel->getTransform()->position = glm::vec2(275.0f, 735.0f);
+	pPositionLabel = new Label("", "Consolas", 20, black);
+	pPositionLabel->getTransform()->position = glm::vec2(275.0f, 760.0f);
 	addChild(pPositionLabel);
 }
