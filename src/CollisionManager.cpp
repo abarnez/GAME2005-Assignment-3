@@ -40,15 +40,16 @@ bool CollisionManager::squaredRadiusCheck(GameObject* object1, GameObject* objec
 bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 {
 	// prepare relevant variables
+	//const auto p1 = object1->getTransform()->position;
 	const auto p2 = object2->getTransform()->position;
 	const float p1Width = object1->getWidth();
 	const float p1Height = object1->getHeight();
 	const float p2Width = object2->getWidth();
 	const float p2Height = object2->getHeight();
-	const auto p1 = glm::vec2(object1->getTransform()->position.x - p1Width * 0.5, object1->getTransform()->position.y - p1Height * 0.5);
+	const auto p1 = glm::vec2(object1->getTransform()->position.x + p1Width, object1->getTransform()->position.y - p2Height * 0.5);
 	if (
 		p1.x < p2.x + p2Width &&
-		p1.x + p1Width > p2.x&&
+		p1.x + p1Width > p2.x &&
 		p1.y < p2.y + p2Height &&
 		p1.y + p1Height > p2.y
 		)
@@ -245,48 +246,10 @@ void CollisionManager::reverseCollision(GameObject* object1, GameObject* object2
 		std::cout << "Ball Mass, Paddle Mass: " << m1 << ", " << m2 << "\nBall Initial Vel: " << v1iX << ", " << v1iY << " Paddle Initial Vel: " << v2iX << ", " << v2iY << "\n";
 		int changePos = -1; // -1 nothing, 0 X, 1 Y.
 		// top right or top left
-		if ((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0))
-		{
-			if (angle <= 45)
-			{
-				// Change Y velocity
-				changePos = 1;
-			}
-			else
-			{
-				// Change X velocity
-				changePos = 0;
-			}
-		}
 
-		// bottom right or bottom left
-		if ((attackVector.x > 0 && attackVector.y > 0) || (attackVector.x < 0 && attackVector.y > 0))
-		{
-			if (angle <= 135)
-			{
-				// Change X velocity
-				changePos = 0;
-			}
-			else
-			{
-				// Change Y velocity
-				changePos = 1;
-			}
-		}
-		if (changePos == 0)
-		{
-			float xVelocityFinal = ((m1 - m2) / (m1 + m2)) * v1iX + ((2 * m2) / (m1 + m2)) * v2iX;
-			object1->getRigidBody()->velocity = glm::vec2(xVelocityFinal, v1iY);
-
-			std::cout << "New Velocity X: " << xVelocityFinal << "\n";
-		}
-		else if (changePos == 1)
-		{
-			float yVelocityFinal = ((m1 - m2) / (m1 + m2)) * v1iY + ((2 * m2) / (m1 + m2)) * v2iY;
-			object1->getRigidBody()->velocity = glm::vec2(v1iX, yVelocityFinal);
-
-			std::cout << "New Velocity Y: " << yVelocityFinal << "\n";
-		}
+		float xVelocityFinal = ((m1 - m2) / (m1 + m2)) * v1iX + ((2 * m2) / (m1 + m2)) * v2iX;
+		float yVelocityFinal = ((m1 - m2) / (m1 + m2)) * v1iY + ((2 * m2) / (m1 + m2)) * v2iY;
+		object1->getRigidBody()->velocity = glm::vec2(xVelocityFinal, yVelocityFinal);
 	}
 }
 
