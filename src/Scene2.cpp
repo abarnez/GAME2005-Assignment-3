@@ -215,11 +215,17 @@ void Scene2::GUI_Function()
 void Scene2::SetText()
 {
 	std::string Text = "";
-	Text = "Velocity (x, y): (" + std::to_string(m_pBall->getRigidBody()->velocity.x) + ", " + std::to_string(m_pBall->getRigidBody()->velocity.y) + ")";
+	Text = "Ball Velocity (x, y): (" + std::to_string(m_pBall->getRigidBody()->velocity.x) + ", " + std::to_string(m_pBall->getRigidBody()->velocity.y) + ")";
 	VelocityLabel->setText(Text);
 
-	Text = "Position (x, y): (" + std::to_string(m_pBall->getTransform()->position.x) + ", " + std::to_string(m_pBall ->getTransform()->position.y) + ")";
+	Text = "Ball Position (x, y): (" + std::to_string(m_pBall->getTransform()->position.x) + ", " + std::to_string(m_pBall ->getTransform()->position.y) + ")";
 	PositionLabel->setText(Text);
+
+	Text = "Paddle Velocity (x, y): (" + std::to_string(m_pPaddle->getRigidBody()->velocity.x) + ", " + std::to_string(m_pPaddle->getRigidBody()->velocity.y) + ")";
+	pVelocityLabel->setText(Text);
+
+	Text = "Paddle Position (x, y): (" + std::to_string(m_pPaddle->getTransform()->position.x) + ", " + std::to_string(m_pPaddle->getTransform()->position.y) + ")";
+	pPositionLabel->setText(Text);
 }
 
 void Scene2::CreateLabels()
@@ -228,15 +234,23 @@ void Scene2::CreateLabels()
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 30.0f);
 	addChild(m_pInstructionsLabel);
 
-	m_pInstructionsLabel2 = new Label("Press (1) to open Scene 1", "Consolas", 20.0f, { 0, 255, 0, 255 });
+	m_pInstructionsLabel2 = new Label("Press (1) to open Scene 1 | Press (0) to go to the Menu", "Consolas", 20.0f, { 0, 255, 0, 255 });
 	m_pInstructionsLabel2->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH - 500, 50.0f);
 	addChild(m_pInstructionsLabel2);
 
 	VelocityLabel = new Label;
-	VelocityLabel->getTransform()->position = glm::vec2(215.0f, 700.0f);
+	VelocityLabel->getTransform()->position = glm::vec2(240.0f, 700.0f);
 	addChild(VelocityLabel);
 
 	PositionLabel = new Label;
-	PositionLabel->getTransform()->position = glm::vec2(210.0f, 685.0f);
+	PositionLabel->getTransform()->position = glm::vec2(250.0f, 685.0f);
 	addChild(PositionLabel);
+
+	pVelocityLabel = new Label;
+	pVelocityLabel->getTransform()->position = glm::vec2(255.0f, 720.0f);
+	addChild(pVelocityLabel);
+
+	pPositionLabel = new Label;
+	pPositionLabel->getTransform()->position = glm::vec2(260.0f, 735.0f);
+	addChild(pPositionLabel);
 }
